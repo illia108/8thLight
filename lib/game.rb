@@ -2,8 +2,8 @@ class Game
   def initialize
     @board = [0, 1, 2, 3, 4, 5, 6, 7, 8]
     @available_spaces = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-    @computer = "X"
-    @human = "O"
+    @computer = "\e[33mX\e[0m"
+    @human = "\e[32mO\e[0m"
   end
 
   def start_game
@@ -21,6 +21,7 @@ class Game
 
   def display_board
     puts "|_#{@board[0]}_|_#{@board[1]}_|_#{@board[2]}_|\n|_#{@board[3]}_|_#{@board[4]}_|_#{@board[5]}_|\n|_#{@board[6]}_|_#{@board[7]}_|_#{@board[8]}_|\n"
+    # puts " #{@board[0]} | #{@board[1]} | #{@board[2]} \n___|___|___\n #{@board[3]} | #{@board[4]} | #{@board[5]} \n___|___|___\n #{@board[6]} | #{@board[7]} | #{@board[8]} \n   |   |   \n"
   end
 
   def get_user_move
