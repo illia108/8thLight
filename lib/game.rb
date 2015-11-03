@@ -1,6 +1,6 @@
 class Game
   def initialize
-    @board = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
+    @board = [0, 1, 2, 3, 4, 5, 6, 7, 8]
     @computer = "X"
     @human = "O"
   end
@@ -61,19 +61,19 @@ class Game
       end
     end
     available_spaces.each do |space|
-      board[space.to_i] = @computer
+      board[space] = @computer
       if game_is_over?(board)
-        best_move = space.to_i
-        board[space.to_i] = space
+        best_move = space
+        board[space] = space
         return best_move
       else
-        board[space.to_i] = @human
+        board[space] = @human
         if game_is_over?(board)
-          best_move = space.to_i
-          board[space.to_i] = space
+          best_move = space
+          board[space] = space
           return best_move
         else
-          board[space.to_i] = space
+          board[space] = space
         end
       end
     end
