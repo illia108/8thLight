@@ -13,16 +13,14 @@ class Game
     until game_is_over?(@board) || tie?(@board)
       get_human_spot
       if !game_is_over?(@board) && !tie?(@board)
-        eval_board
+        computer_move
       end
-      display_board
     end
     puts "Game over"
   end
 
   def display_board
     puts "|_#{@board[0]}_|_#{@board[1]}_|_#{@board[2]}_|\n|_#{@board[3]}_|_#{@board[4]}_|_#{@board[5]}_|\n|_#{@board[6]}_|_#{@board[7]}_|_#{@board[8]}_|\n"
-    p @available_spaces
   end
 
   def get_human_spot
@@ -37,7 +35,7 @@ class Game
     end
   end
 
-  def eval_board
+  def computer_move
     spot = nil
     until spot
       if @board[4] == 4
@@ -57,6 +55,8 @@ class Game
   def make_move(spot, player)
     @board[spot] = player
     @available_spaces.delete(spot)
+    display_board
+    p "#{player} takes spot #{spot}"
   end
 
   def get_best_move(board, next_player, depth = 0, best_score = {})
