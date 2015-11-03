@@ -41,7 +41,7 @@ class Game
     if @board[4] == 4
       make_move(4, @computer)
     else
-      spot = get_best_move(@board, @computer)
+      spot = get_best_move(@board.clone, @computer)
       make_move(spot, @computer)
     end
   end
