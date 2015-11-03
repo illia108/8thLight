@@ -2,8 +2,8 @@ class Game
   def initialize
     @board = [0, 1, 2, 3, 4, 5, 6, 7, 8]
     @available_spaces = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-    @computer = "\e[33mX\e[0m"
-    @human = "\e[32mO\e[0m"
+    @computer = "X"
+    @human = "O"
   end
 
   def start_game
@@ -47,7 +47,7 @@ class Game
   end
 
   def make_move(spot, player)
-    @board[spot] = player
+    @board[spot] = "\e[32m#{player}\e[0m"
     @available_spaces.delete(spot)
     display_board
     p "#{player} takes spot #{spot}"
