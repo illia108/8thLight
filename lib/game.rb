@@ -9,9 +9,9 @@ class Game
     puts "Welcome to my Tic Tac Toe game"
     display_board
     puts "Please select your spot."
-    until game_is_over(@board) || tie(@board)
+    until game_is_over?(@board) || tie?(@board)
       get_human_spot
-      if !game_is_over(@board) && !tie(@board)
+      if !game_is_over?(@board) && !tie?(@board)
         eval_board
       end
       display_board
@@ -62,13 +62,13 @@ class Game
     end
     available_spaces.each do |space|
       board[space.to_i] = @computer
-      if game_is_over(board)
+      if game_is_over?(board)
         best_move = space.to_i
         board[space.to_i] = space
         return best_move
       else
         board[space.to_i] = @human
-        if game_is_over(board)
+        if game_is_over?(board)
           best_move = space.to_i
           board[space.to_i] = space
           return best_move
@@ -85,7 +85,7 @@ class Game
     end
   end
 
-  def game_is_over(board)
+  def game_is_over?(board)
 
     [board[0], board[1], board[2]].uniq.length == 1 ||
     [board[3], board[4], board[5]].uniq.length == 1 ||
@@ -97,7 +97,7 @@ class Game
     [board[2], board[4], board[6]].uniq.length == 1
   end
 
-  def tie(board)
+  def tie?(board)
     board.all? { |space| space == "X" || space == "O" }
   end
 
