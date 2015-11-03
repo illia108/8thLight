@@ -28,7 +28,6 @@ class Game
     spot = nil
     until spot
       spot = gets.chomp.to_i
-      # if @board[spot] != "X" && @board[spot] != "O"
       if @available_spaces.include?(spot)
         make_move(spot, @human)
       else
