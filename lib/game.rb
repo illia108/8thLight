@@ -9,7 +9,7 @@ class Game
   def start_game
     puts "Welcome to my Tic Tac Toe game"
     display_board
-    puts "Please select your spot."
+
     until game_is_over?(@board) || tie?(@board)
       get_user_move
       if !game_is_over?(@board) && !tie?(@board)
@@ -24,6 +24,7 @@ class Game
   end
 
   def get_user_move
+    puts "Please select your spot."
     spot = nil
     until spot
       spot = gets.chomp.to_i
@@ -60,29 +61,22 @@ class Game
   end
 
   def get_best_move(board, next_player, depth = 0, best_score = {})
-    best_move = nil
     @available_spaces.each do |space|
       board[space] = @computer
       if game_is_over?(board)
-        best_move = space
         board[space] = space
-        return best_move
+        return space
       else
         board[space] = @human
         if game_is_over?(board)
-          best_move = space
           board[space] = space
-          return best_move
+          return space
         else
           board[space] = space
         end
       end
     end
-    if best_move
-      return best_move
-    else
-      return @available_spaces.sample
-    end
+    return @available_spaces.sample
   end
 
   def game_is_over?(board)
