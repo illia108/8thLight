@@ -11,9 +11,9 @@ class Game
     display_board
     puts "Please select your spot."
     until game_is_over?(@board) || tie?(@board)
-      get_human_spot
+      get_user_move
       if !game_is_over?(@board) && !tie?(@board)
-        computer_move
+        get_computer_move
       end
     end
     puts "Game over"
@@ -23,7 +23,7 @@ class Game
     puts "|_#{@board[0]}_|_#{@board[1]}_|_#{@board[2]}_|\n|_#{@board[3]}_|_#{@board[4]}_|_#{@board[5]}_|\n|_#{@board[6]}_|_#{@board[7]}_|_#{@board[8]}_|\n"
   end
 
-  def get_human_spot
+  def get_user_move
     spot = nil
     until spot
       spot = gets.chomp.to_i
@@ -35,7 +35,7 @@ class Game
     end
   end
 
-  def computer_move
+  def get_computer_move
     spot = nil
     until spot
       if @board[4] == 4
@@ -81,8 +81,7 @@ class Game
     if best_move
       return best_move
     else
-      random = rand(0..@available_spaces.count)
-      return @available_spaces[random].to_i
+      return @available_spaces.sample
     end
   end
 
