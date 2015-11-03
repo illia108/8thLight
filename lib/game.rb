@@ -28,7 +28,8 @@ class Game
     spot = nil
     until spot
       spot = gets.chomp.to_i
-      if @board[spot] != "X" && @board[spot] != "O"
+      # if @board[spot] != "X" && @board[spot] != "O"
+      if @available_spaces.include?(spot)
         make_move(spot, @human)
       else
         spot = nil
@@ -56,12 +57,10 @@ class Game
     @available_spaces.each do |space|
       board[space] = @computer
       if game_is_over?(board)
-        board[space] = space
         return space
       else
         board[space] = @human
         if game_is_over?(board)
-          board[space] = space
           return space
         else
           board[space] = space
