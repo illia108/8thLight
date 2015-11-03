@@ -38,7 +38,7 @@ class Game
   def eval_board
     spot = nil
     until spot
-      if @board[4] == "4"
+      if @board[4] == 4
         spot = 4
         @board[spot] = @computer
       else
