@@ -37,19 +37,11 @@ class Game
   end
 
   def get_computer_move
-    spot = nil
-    until spot
-      if @board[4] == 4
-        spot = 4
-        make_move(spot, @computer)
-      else
-        spot = get_best_move(@board, @computer)
-        if @board[spot] != "X" && @board[spot] != "O"
-          make_move(spot, @computer)
-        else
-          spot = nil
-        end
-      end
+    if @board[4] == 4
+      make_move(4, @computer)
+    else
+      spot = get_best_move(@board, @computer)
+      make_move(spot, @computer)
     end
   end
 
