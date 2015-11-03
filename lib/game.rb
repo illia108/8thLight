@@ -30,8 +30,7 @@ class Game
     until spot
       spot = gets.chomp.to_i
       if @board[spot] != "X" && @board[spot] != "O"
-        @board[spot] = @human
-        @available_spaces.delete(spot)
+        make_move(spot, @human)
       else
         spot = nil
       end
@@ -43,18 +42,21 @@ class Game
     until spot
       if @board[4] == 4
         spot = 4
-        @board[spot] = @computer
-        @available_spaces.delete(spot)
+        make_move(spot, @computer)
       else
         spot = get_best_move(@board, @computer)
         if @board[spot] != "X" && @board[spot] != "O"
-          @board[spot] = @computer
-          @available_spaces.delete(spot)
+          make_move(spot, @computer)
         else
           spot = nil
         end
       end
     end
+  end
+
+  def make_move(spot, player)
+    @board[spot] = player
+    @available_spaces.delete(spot)
   end
 
   def get_best_move(board, next_player, depth = 0, best_score = {})
