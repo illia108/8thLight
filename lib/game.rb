@@ -80,7 +80,7 @@ class Game
       if /^\d{1}$/ === spot && @board.available_spaces.include?(spot.to_i)
         make_move(spot.to_i, @human)
       else
-        puts "\e[31mPlease enter a valid value\e[0m"
+        puts "\e[31m"+"Please enter a valid value"+"\e[0m"
         puts "Valid values: #{@board.available_spaces}"
         spot = nil
       end
@@ -101,7 +101,7 @@ class Game
   def make_move(spot, player)
     @board.update_board(player, spot)
     display_board
-    puts "\e[32m#{player} takes spot #{spot}\e[0m"
+    puts "\e[32m"+"#{player} takes spot #{spot}"+"\e[0m"
   end
 
   def get_best_move(board, next_player, depth = 0, best_score = {})
