@@ -81,13 +81,13 @@ class Game
 
   def get_best_move(board, next_player, depth = 0, best_score = {})
     board.available_spaces.each do |space|
-      # board.values[space] = @computer
-      board.update_board(@computer, space)
+      board.values[space] = @computer
+      # board.update_board(@computer, space)
       if board.has_been_won?
         return space
       else
-        # board.values[space] = @human
-        board.update_board(@human, space)
+        board.values[space] = @human
+        # board.update_board(@human, space)
         if board.has_been_won?
           return space
         else
