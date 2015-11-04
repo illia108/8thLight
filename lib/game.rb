@@ -134,20 +134,20 @@ class Game
     @view.display_board(@board)
 
     while true
-      if @first_player.human
-        get_user_move(@first_player)
-      else
-        get_computer_move(@first_player)
-      end
+      player_turn(@first_player)
       break if game_over?
-      if @second_player.human
-        get_user_move(@second_player)
-      else
-        get_computer_move(@second_player)
-      end
+      player_turn(@second_player)
       break if game_over?
     end
     @view.game_over
+  end
+
+  def player_turn(player)
+    if player.human
+      get_user_move(player)
+    else
+      get_computer_move(player)
+    end
   end
 
   def set_game_mode(mode)
