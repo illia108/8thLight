@@ -77,7 +77,7 @@ class Game
     spot = nil
     until spot
       spot = gets.chomp
-      if /^\d{1}$/ === spot && @board.available_spaces.include?(spot.to_i)
+      if valid_input?(spot)
         make_move(spot.to_i, @human)
       else
         puts "\e[31m"+"Please enter a valid value"+"\e[0m"
@@ -85,6 +85,10 @@ class Game
         spot = nil
       end
     end
+  end
+
+  def valid_input?(spot)
+    /^\d{1}$/ === spot && @board.available_spaces.include?(spot.to_i)
   end
 
   def get_computer_move
