@@ -61,7 +61,15 @@ class Game
   end
 
   def display_board
-    puts " #{@board.values[0]} | #{@board.values[1]} | #{@board.values[2]} \n---|---|---\n #{@board.values[3]} | #{@board.values[4]} | #{@board.values[5]} \n---|---|---\n #{@board.values[6]} | #{@board.values[7]} | #{@board.values[8]} \n"
+    puts [
+      "",
+      "  #{@board.values[0]} | #{@board.values[1]} | #{@board.values[2]}",
+      " ---|---|---",
+      "  #{@board.values[3]} | #{@board.values[4]} | #{@board.values[5]}",
+      " ---|---|---",
+      "  #{@board.values[6]} | #{@board.values[7]} | #{@board.values[8]}",
+      "",
+    ].join("\n") + "\n"
   end
 
   def get_user_move
@@ -69,17 +77,22 @@ class Game
     spot = nil
     until spot
       spot = gets.chomp
-      if /^\d{1}$/ === spot && @board.available_spaces.include?(spot.to_i)
+      if valid_input?(spot)
         make_move(spot.to_i, @human)
       else
-        puts "Please enter a valid value"
+        puts "\e[31m"+"Please enter a valid value"+"\e[0m"
         puts "Valid values: #{@board.available_spaces}"
         spot = nil
       end
     end
   end
 
+  def valid_input?(spot)
+    /^\d{1}$/ === spot && @board.available_spaces.include?(spot.to_i)
+  end
+
   def get_computer_move
+    sleep 1
     if @board.values[4] == 4
       make_move(4, @computer)
     else
@@ -89,9 +102,10 @@ class Game
   end
 
   def make_move(spot, player)
+    system 'clear'
     @board.update_board(player, spot)
     display_board
-    puts "#{player} takes spot #{spot}"
+    puts "\e[32m"+"#{player} takes spot #{spot}"+"\e[0m"
   end
 
   def get_best_move(board, next_player, depth = 0, best_score = {})
