@@ -28,15 +28,37 @@ class Board
   end
 end
 
+class Player
+  attr_accessor :marker
+
+  def initialize(name)
+    @marker = nil
+    @name = name
+  end
+
+  def set_marker
+    until @marker
+      puts "Enter marker for #{@name}"
+      marker = gets.chomp
+      if /^\D$/ === marker
+        @marker = marker
+      else
+        puts "\e[31m"+"Please enter a single non-digit character"+"\e[0m"
+      end
+    end
+  end
+end
+
 class Game
   def initialize
     @board = Board.new
-    @computer = "X"
-    @human = "O"
+    @player1 = Player.new("Player1")
+    @player2 = Player.new("Player2")
   end
 
   def start_game
     puts "Welcome to my Tic Tac Toe game"
+    select_markers
     display_board
 
     while true
@@ -47,6 +69,11 @@ class Game
     end
 
     puts "End"
+  end
+
+  def select_markers
+    @player1.set_marker
+    @player2.set_marker
   end
 
   def game_over?
@@ -78,7 +105,7 @@ class Game
     until spot
       spot = gets.chomp
       if valid_input?(spot)
-        make_move(spot.to_i, @human)
+        make_move(spot.to_i, @player1.marker)
       else
         puts "\e[31m"+"Please enter a valid value"+"\e[0m"
         puts "Valid values: #{@board.available_spaces}"
@@ -94,10 +121,10 @@ class Game
   def get_computer_move
     sleep 1
     if @board.values[4] == 4
-      make_move(4, @computer)
+      make_move(4, @player2.marker)
     else
-      spot = get_best_move(@board.clone, @computer)
-      make_move(spot, @computer)
+      spot = get_best_move(@board.clone, @player2.marker)
+      make_move(spot, @player2.marker)
     end
   end
 
@@ -110,13 +137,13 @@ class Game
 
   def get_best_move(board, next_player, depth = 0, best_score = {})
     board.available_spaces.each do |space|
-      board.values[space] = @computer
-      # board.update_board(@computer, space)
+      board.values[space] = @player2.marker
+      # board.update_board(@player2.marker, space)
       if board.has_been_won?
         return space
       else
-        board.values[space] = @human
-        # board.update_board(@human, space)
+        board.values[space] = @player1.marker
+        # board.update_board(@player1.marker, space)
         if board.has_been_won?
           return space
         else
