@@ -62,6 +62,7 @@ class Game
     mode = select_game_mode
     set_game_mode(mode)
     select_markers
+    select_first_player
     p @player1
     p @player2
     display_board
@@ -101,6 +102,13 @@ class Game
   def select_markers
     @player1.set_marker
     @player2.set_marker
+  end
+
+  def select_first_player
+    puts "Who will go first?"
+    puts "1) #{@player1.name}"
+    puts "2) #{@player2.name}"
+    gets.chomp
   end
 
   def game_over?
