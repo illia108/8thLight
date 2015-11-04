@@ -1,7 +1,20 @@
+class Board
+  attr_accessor :values, :available_spaces
+
+  def initialize
+    @values = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    @available_spaces = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+  end
+
+  def update_board(value, position)
+    @values[position] = "\e[32m#{value}\e[0m"
+    @available_spaces.delete(position)
+  end
+end
+
 class Game
   def initialize
-    @board = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-    @available_spaces = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    @board = Board.new
     @computer = "X"
     @human = "O"
   end
@@ -20,8 +33,8 @@ class Game
   end
 
   def display_board
-    puts "|_#{@board[0]}_|_#{@board[1]}_|_#{@board[2]}_|\n|_#{@board[3]}_|_#{@board[4]}_|_#{@board[5]}_|\n|_#{@board[6]}_|_#{@board[7]}_|_#{@board[8]}_|\n"
-    # puts " #{@board[0]} | #{@board[1]} | #{@board[2]} \n___|___|___\n #{@board[3]} | #{@board[4]} | #{@board[5]} \n___|___|___\n #{@board[6]} | #{@board[7]} | #{@board[8]} \n   |   |   \n"
+    puts "|_#{@board.values[0]}_|_#{@board.values[1]}_|_#{@board.values[2]}_|\n|_#{@board.values[3]}_|_#{@board.values[4]}_|_#{@board.values[5]}_|\n|_#{@board.values[6]}_|_#{@board.values[7]}_|_#{@board.values[8]}_|\n"
+    # puts " #{@board.values[0]} | #{@board.values[1]} | #{@board.values[2]} \n___|___|___\n #{@board.values[3]} | #{@board.values[4]} | #{@board.values[5]} \n___|___|___\n #{@board.values[6]} | #{@board.values[7]} | #{@board.values[8]} \n   |   |   \n"
   end
 
   def get_user_move
@@ -29,7 +42,7 @@ class Game
     spot = nil
     until spot
       spot = gets.chomp.to_i
-      if @available_spaces.include?(spot)
+      if @board.available_spaces.include?(spot)
         make_move(spot, @human)
       else
         spot = nil
@@ -38,7 +51,7 @@ class Game
   end
 
   def get_computer_move
-    if @board[4] == 4
+    if @board.values[4] == 4
       make_move(4, @computer)
     else
       spot = get_best_move(@board.clone, @computer)
@@ -47,43 +60,42 @@ class Game
   end
 
   def make_move(spot, player)
-    @board[spot] = "\e[32m#{player}\e[0m"
-    @available_spaces.delete(spot)
+    @board.update_board(player, spot)
     display_board
     p "#{player} takes spot #{spot}"
   end
 
   def get_best_move(board, next_player, depth = 0, best_score = {})
-    @available_spaces.each do |space|
-      board[space] = @computer
+    board.available_spaces.each do |space|
+      board.values[space] = @computer
       if game_is_over?(board)
         return space
       else
-        board[space] = @human
+        board.values[space] = @human
         if game_is_over?(board)
           return space
         else
-          board[space] = space
+          board.values[space] = space
         end
       end
     end
-    return @available_spaces.sample
+    return board.available_spaces.sample
   end
 
   def game_is_over?(board)
 
-    [board[0], board[1], board[2]].uniq.length == 1 ||
-    [board[3], board[4], board[5]].uniq.length == 1 ||
-    [board[6], board[7], board[8]].uniq.length == 1 ||
-    [board[0], board[3], board[6]].uniq.length == 1 ||
-    [board[1], board[4], board[7]].uniq.length == 1 ||
-    [board[2], board[5], board[8]].uniq.length == 1 ||
-    [board[0], board[4], board[8]].uniq.length == 1 ||
-    [board[2], board[4], board[6]].uniq.length == 1
+    [board.values[0], board.values[1], board.values[2]].uniq.length == 1 ||
+    [board.values[3], board.values[4], board.values[5]].uniq.length == 1 ||
+    [board.values[6], board.values[7], board.values[8]].uniq.length == 1 ||
+    [board.values[0], board.values[3], board.values[6]].uniq.length == 1 ||
+    [board.values[1], board.values[4], board.values[7]].uniq.length == 1 ||
+    [board.values[2], board.values[5], board.values[8]].uniq.length == 1 ||
+    [board.values[0], board.values[4], board.values[8]].uniq.length == 1 ||
+    [board.values[2], board.values[4], board.values[6]].uniq.length == 1
   end
 
   def tie?(board)
-    board.all? { |space| space == "X" || space == "O" }
+    board.values.all? { |space| space == "X" || space == "O" }
   end
 
 end
