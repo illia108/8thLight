@@ -51,11 +51,11 @@ class Game
 
   def game_over?
     if @board.has_been_won?
-      p "Game Won"
+      puts "Game Won"
       return true
     end
     if @board.tie?
-      p "It's a Tie"
+      puts "It's a Tie"
       return true
     end
   end
@@ -68,10 +68,12 @@ class Game
     puts "Please select your spot."
     spot = nil
     until spot
-      spot = gets.chomp.to_i
-      if @board.available_spaces.include?(spot)
-        make_move(spot, @human)
+      spot = gets.chomp
+      if /^\d{1}$/ === spot && @board.available_spaces.include?(spot.to_i)
+        make_move(spot.to_i, @human)
       else
+        puts "Please enter a valid value"
+        puts "Valid values: #{@board.available_spaces}"
         spot = nil
       end
     end
@@ -89,7 +91,7 @@ class Game
   def make_move(spot, player)
     @board.update_board(player, spot)
     display_board
-    p "#{player} takes spot #{spot}"
+    puts "#{player} takes spot #{spot}"
   end
 
   def get_best_move(board, next_player, depth = 0, best_score = {})
