@@ -61,7 +61,15 @@ class Game
   end
 
   def display_board
-    puts " #{@board.values[0]} | #{@board.values[1]} | #{@board.values[2]} \n---|---|---\n #{@board.values[3]} | #{@board.values[4]} | #{@board.values[5]} \n---|---|---\n #{@board.values[6]} | #{@board.values[7]} | #{@board.values[8]} \n"
+    puts [
+      "",
+      "  #{@board.values[0]} | #{@board.values[1]} | #{@board.values[2]}",
+      " ---|---|---",
+      "  #{@board.values[3]} | #{@board.values[4]} | #{@board.values[5]}",
+      " ---|---|---",
+      "  #{@board.values[6]} | #{@board.values[7]} | #{@board.values[8]}",
+      "",
+      ].join("\n") + "\n"
   end
 
   def get_user_move
