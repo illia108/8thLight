@@ -70,6 +70,11 @@ class View
     return gets.chomp
   end
 
+  def get_user_marker(player)
+    puts "Enter marker for #{player.name}"
+    return gets.chomp
+  end
+
   def display_board(board)
     puts [
       "",
@@ -89,6 +94,10 @@ class View
   def invalid_move(board)
     puts "\e[31m"+"Please enter a valid value"+"\e[0m"
     puts "Valid values: #{board.available_spaces}"
+  end
+
+  def invalid_marker
+    puts "\e[31m"+"Please enter a single non-digit character"+"\e[0m"
   end
 
   def commentary(player, spot)
@@ -165,8 +174,19 @@ class Game
   end
 
   def select_markers
-    @player1.set_marker
-    @player2.set_marker
+    set_marker(@player1)
+    set_marker(@player2)
+  end
+
+  def set_marker(player)
+    until player.marker
+      marker = @view.get_user_marker(player)
+      if /^\D$/ === marker
+        player.marker = marker
+      else
+        @view.invalid_marker
+      end
+    end
   end
 
   def set_first_player(first)
