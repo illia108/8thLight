@@ -108,7 +108,19 @@ class Game
     puts "Who will go first?"
     puts "1) #{@player1.name}"
     puts "2) #{@player2.name}"
-    gets.chomp
+    return gets.chomp
+  end
+
+  def set_first_player(first)
+    case first
+    when "1"
+      @first_player = @player1
+      @second_player = @player2
+    when "2"
+      @first_player = @player2
+      @second_player = @player1
+    end
+
   end
 
   def game_over?
