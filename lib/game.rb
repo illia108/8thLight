@@ -29,11 +29,12 @@ class Board
 end
 
 class Player
-  attr_accessor :marker
+  attr_accessor :marker, :name, :human
 
-  def initialize(name)
+  def initialize(args)
     @marker = nil
-    @name = name
+    @name = args[:name]
+    @human = args[:human]
   end
 
   def set_marker
@@ -52,13 +53,19 @@ end
 class Game
   def initialize
     @board = Board.new
-    @player1 = Player.new("Player1")
-    @player2 = Player.new("Player2")
+    @player1 = nil
+    @player2 = nil
   end
 
   def start_game
     puts "Welcome to my Tic Tac Toe game"
+    mode = select_game_mode
+    set_game_mode(mode)
     select_markers
+    first = select_first_player
+    set_first_player(first)
+    p @player1
+    p @player2
     display_board
 
     while true
@@ -71,9 +78,50 @@ class Game
     puts "End"
   end
 
+  def select_game_mode
+    puts "What type of game would you like to play"
+    puts "1) Human v Human"
+    puts "2) Computer v Computer"
+    puts "3) Human v Computer"
+    return gets.chomp
+  end
+
+  def set_game_mode(mode)
+    case mode
+    when '1'
+      @player1 = Player.new({name: "Player1", human: true})
+      @player2 = Player.new({name: "Player2", human: true})
+    when '2'
+      @player1 = Player.new({name: "Computer1", human: false})
+      @player2 = Player.new({name: "Computer2", human: false})
+    when '3'
+      @player1 = Player.new({name: "Player", human: true})
+      @player2 = Player.new({name: "Computer", human: false})
+    end
+  end
+
   def select_markers
     @player1.set_marker
     @player2.set_marker
+  end
+
+  def select_first_player
+    puts "Who will go first?"
+    puts "1) #{@player1.name}"
+    puts "2) #{@player2.name}"
+    return gets.chomp
+  end
+
+  def set_first_player(first)
+    case first
+    when "1"
+      @first_player = @player1
+      @second_player = @player2
+    when "2"
+      @first_player = @player2
+      @second_player = @player1
+    end
+
   end
 
   def game_over?
