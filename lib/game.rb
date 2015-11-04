@@ -7,8 +7,23 @@ class Board
   end
 
   def update_board(value, position)
-    @values[position] = "\e[32m#{value}\e[0m"
+    @values[position] = value
     @available_spaces.delete(position)
+  end
+
+  def has_been_won?
+    [@values[0], @values[1], @values[2]].uniq.length == 1 ||
+    [@values[3], @values[4], @values[5]].uniq.length == 1 ||
+    [@values[6], @values[7], @values[8]].uniq.length == 1 ||
+    [@values[0], @values[3], @values[6]].uniq.length == 1 ||
+    [@values[1], @values[4], @values[7]].uniq.length == 1 ||
+    [@values[2], @values[5], @values[8]].uniq.length == 1 ||
+    [@values[0], @values[4], @values[8]].uniq.length == 1 ||
+    [@values[2], @values[4], @values[6]].uniq.length == 1
+  end
+
+  def tie?
+    @values.all? { |space| space == "X" || space == "O" }
   end
 end
 
@@ -23,9 +38,9 @@ class Game
     puts "Welcome to my Tic Tac Toe game"
     display_board
 
-    until game_is_over?(@board) || tie?(@board)
+    until @board.has_been_won? || @board.tie?
       get_user_move
-      if !game_is_over?(@board) && !tie?(@board)
+      if !@board.has_been_won? && !@board.tie?
         get_computer_move
       end
     end
@@ -33,8 +48,7 @@ class Game
   end
 
   def display_board
-    puts "|_#{@board.values[0]}_|_#{@board.values[1]}_|_#{@board.values[2]}_|\n|_#{@board.values[3]}_|_#{@board.values[4]}_|_#{@board.values[5]}_|\n|_#{@board.values[6]}_|_#{@board.values[7]}_|_#{@board.values[8]}_|\n"
-    # puts " #{@board.values[0]} | #{@board.values[1]} | #{@board.values[2]} \n___|___|___\n #{@board.values[3]} | #{@board.values[4]} | #{@board.values[5]} \n___|___|___\n #{@board.values[6]} | #{@board.values[7]} | #{@board.values[8]} \n   |   |   \n"
+    puts " #{@board.values[0]} | #{@board.values[1]} | #{@board.values[2]} \n---|---|---\n #{@board.values[3]} | #{@board.values[4]} | #{@board.values[5]} \n---|---|---\n #{@board.values[6]} | #{@board.values[7]} | #{@board.values[8]} \n"
   end
 
   def get_user_move
@@ -67,12 +81,14 @@ class Game
 
   def get_best_move(board, next_player, depth = 0, best_score = {})
     board.available_spaces.each do |space|
-      board.values[space] = @computer
-      if game_is_over?(board)
+      # board.values[space] = @computer
+      board.update_board(@computer, space)
+      if board.has_been_won?
         return space
       else
-        board.values[space] = @human
-        if game_is_over?(board)
+        # board.values[space] = @human
+        board.update_board(@human, space)
+        if board.has_been_won?
           return space
         else
           board.values[space] = space
@@ -82,21 +98,7 @@ class Game
     return board.available_spaces.sample
   end
 
-  def game_is_over?(board)
 
-    [board.values[0], board.values[1], board.values[2]].uniq.length == 1 ||
-    [board.values[3], board.values[4], board.values[5]].uniq.length == 1 ||
-    [board.values[6], board.values[7], board.values[8]].uniq.length == 1 ||
-    [board.values[0], board.values[3], board.values[6]].uniq.length == 1 ||
-    [board.values[1], board.values[4], board.values[7]].uniq.length == 1 ||
-    [board.values[2], board.values[5], board.values[8]].uniq.length == 1 ||
-    [board.values[0], board.values[4], board.values[8]].uniq.length == 1 ||
-    [board.values[2], board.values[4], board.values[6]].uniq.length == 1
-  end
-
-  def tie?(board)
-    board.values.all? { |space| space == "X" || space == "O" }
-  end
 
 end
 
