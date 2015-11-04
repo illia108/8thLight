@@ -50,41 +50,9 @@ class Player
   end
 end
 
-class Game
-  def initialize
-    @board = Board.new
-    @player1 = nil
-    @player2 = nil
-  end
-
-  def start_game
+class View
+  def welcome
     puts "Welcome to my Tic Tac Toe game"
-    mode = select_game_mode
-    set_game_mode(mode)
-    select_markers
-    first = select_first_player
-    set_first_player(first)
-    p @player1
-    p @player2
-    display_board
-
-    while true
-      # get_user_move
-      if @first_player.human
-        get_user_move(@first_player)
-      else
-        get_computer_move(@first_player)
-      end
-      break if game_over?
-      if @second_player.human
-        get_user_move(@second_player)
-      else
-        get_computer_move(@second_player)
-      end
-      break if game_over?
-    end
-
-    puts "End"
   end
 
   def select_game_mode
@@ -93,6 +61,102 @@ class Game
     puts "2) Computer v Computer"
     puts "3) Human v Computer"
     return gets.chomp
+  end
+
+  def select_first_player(player1, player2)
+    puts "Who will go first?"
+    puts "1) #{player1.name}"
+    puts "2) #{player2.name}"
+    return gets.chomp
+  end
+
+  def get_user_marker(player)
+    puts "Enter marker for #{player.name}"
+    return gets.chomp
+  end
+
+  def display_board(board)
+    puts [
+      "",
+      "  #{board.values[0]} | #{board.values[1]} | #{board.values[2]}",
+      " ---|---|---",
+      "  #{board.values[3]} | #{board.values[4]} | #{board.values[5]}",
+      " ---|---|---",
+      "  #{board.values[6]} | #{board.values[7]} | #{board.values[8]}",
+      "",
+    ].join("\n") + "\n"
+  end
+
+  def prompt_user_move(player)
+    puts "#{player.name} (#{player.marker}): Please select your spot."
+  end
+
+  def invalid_move(board)
+    puts "\e[31m"+"Please enter a valid value"+"\e[0m"
+    puts "Valid values: #{board.available_spaces}"
+  end
+
+  def invalid_marker
+    puts "\e[31m"+"Please enter a single non-digit character"+"\e[0m"
+  end
+
+  def commentary(player, spot)
+    puts "\e[32m"+"#{player.name} (#{player.marker}) takes spot #{spot}"+"\e[0m"
+  end
+
+  def win
+    puts "Game Won"
+  end
+
+  def tie
+    puts "It's a Tie"
+  end
+
+  def game_over
+    puts "End"
+  end
+
+  def clear
+    system 'clear'
+  end
+end
+
+class Game
+  def initialize
+    @board = Board.new
+    @player1 = nil
+    @player2 = nil
+    @view = View.new
+  end
+
+  def start_game
+    @view.welcome
+
+    mode = @view.select_game_mode
+    set_game_mode(mode)
+
+    select_markers
+
+    first = @view.select_first_player(@player1, @player2)
+    set_first_player(first)
+
+    @view.display_board(@board)
+
+    while true
+      player_turn(@first_player)
+      break if game_over?
+      player_turn(@second_player)
+      break if game_over?
+    end
+    @view.game_over
+  end
+
+  def player_turn(player)
+    if player.human
+      get_user_move(player)
+    else
+      get_computer_move(player)
+    end
   end
 
   def set_game_mode(mode)
@@ -110,15 +174,19 @@ class Game
   end
 
   def select_markers
-    @player1.set_marker
-    @player2.set_marker
+    set_marker(@player1)
+    set_marker(@player2)
   end
 
-  def select_first_player
-    puts "Who will go first?"
-    puts "1) #{@player1.name}"
-    puts "2) #{@player2.name}"
-    return gets.chomp
+  def set_marker(player)
+    until player.marker
+      marker = @view.get_user_marker(player)
+      if /^\D$/ === marker
+        player.marker = marker
+      else
+        @view.invalid_marker
+      end
+    end
   end
 
   def set_first_player(first)
@@ -135,37 +203,24 @@ class Game
 
   def game_over?
     if @board.has_been_won?
-      puts "Game Won"
+      @view.win
       return true
     end
     if @board.tie?
-      puts "It's a Tie"
+      @view.tie
       return true
     end
   end
 
-  def display_board
-    puts [
-      "",
-      "  #{@board.values[0]} | #{@board.values[1]} | #{@board.values[2]}",
-      " ---|---|---",
-      "  #{@board.values[3]} | #{@board.values[4]} | #{@board.values[5]}",
-      " ---|---|---",
-      "  #{@board.values[6]} | #{@board.values[7]} | #{@board.values[8]}",
-      "",
-    ].join("\n") + "\n"
-  end
-
   def get_user_move(player)
-    puts "#{player.name} (#{player.marker}): Please select your spot."
+    @view.prompt_user_move(player)
     spot = nil
     until spot
       spot = gets.chomp
       if valid_input?(spot)
         make_move(spot.to_i, player)
       else
-        puts "\e[31m"+"Please enter a valid value"+"\e[0m"
-        puts "Valid values: #{@board.available_spaces}"
+        @view.invalid_move(@board)
         spot = nil
       end
     end
@@ -186,10 +241,10 @@ class Game
   end
 
   def make_move(spot, player)
-    system 'clear'
+    @view.clear
     @board.update_board(player.marker, spot)
-    display_board
-    puts "\e[32m"+"#{player.name} (#{player.marker}) takes spot #{spot}"+"\e[0m"
+    @view.display_board(@board)
+    @view.commentary(player, spot)
   end
 
   def get_best_move(board, player, depth = 0, best_score = {})
