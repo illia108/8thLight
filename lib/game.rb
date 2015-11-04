@@ -68,10 +68,12 @@ class Game
     puts "Please select your spot."
     spot = nil
     until spot
-      spot = gets.chomp.to_i
-      if @board.available_spaces.include?(spot)
-        make_move(spot, @human)
+      spot = gets.chomp
+      if /^\d{1}$/ === spot && @board.available_spaces.include?(spot.to_i)
+        make_move(spot.to_i, @human)
       else
+        p "Please enter a valid value"
+        p @board.available_spaces
         spot = nil
       end
     end
