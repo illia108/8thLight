@@ -23,7 +23,8 @@ class Board
   end
 
   def tie?
-    @values.all? { |space| space == "X" || space == "O" }
+    # @values.all? { |space| space == "X" || space == "O" }
+    @available_spaces.empty?
   end
 end
 
@@ -38,13 +39,25 @@ class Game
     puts "Welcome to my Tic Tac Toe game"
     display_board
 
-    until @board.has_been_won? || @board.tie?
+    while true
       get_user_move
-      if !@board.has_been_won? && !@board.tie?
-        get_computer_move
-      end
+      break if game_over?
+      get_computer_move
+      break if game_over?
     end
-    puts "Game over"
+
+    puts "End"
+  end
+
+  def game_over?
+    if @board.has_been_won?
+      p "Game Won"
+      return true
+    end
+    if @board.tie?
+      p "It's a Tie"
+      return true
+    end
   end
 
   def display_board
@@ -97,9 +110,6 @@ class Game
     end
     return board.available_spaces.sample
   end
-
-
-
 end
 
 game = Game.new
