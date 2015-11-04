@@ -69,9 +69,18 @@ class Game
     display_board
 
     while true
-      get_user_move
+      # get_user_move
+      if @first_player.human
+        get_user_move(@first_player)
+      else
+        get_computer_move(@first_player)
+      end
       break if game_over?
-      get_computer_move
+      if @second_player.human
+        get_user_move(@second_player)
+      else
+        get_computer_move(@second_player)
+      end
       break if game_over?
     end
 
@@ -147,13 +156,13 @@ class Game
     ].join("\n") + "\n"
   end
 
-  def get_user_move
-    puts "Please select your spot."
+  def get_user_move(player)
+    puts "#{player.name} (#{player.marker}): Please select your spot."
     spot = nil
     until spot
       spot = gets.chomp
       if valid_input?(spot)
-        make_move(spot.to_i, @player1.marker)
+        make_move(spot.to_i, player)
       else
         puts "\e[31m"+"Please enter a valid value"+"\e[0m"
         puts "Valid values: #{@board.available_spaces}"
@@ -166,31 +175,31 @@ class Game
     /^\d{1}$/ === spot && @board.available_spaces.include?(spot.to_i)
   end
 
-  def get_computer_move
+  def get_computer_move(player)
     sleep 1
     if @board.values[4] == 4
-      make_move(4, @player2.marker)
+      make_move(4, player)
     else
-      spot = get_best_move(@board.clone, @player2.marker)
-      make_move(spot, @player2.marker)
+      spot = get_best_move(@board.clone, player)
+      make_move(spot, player)
     end
   end
 
   def make_move(spot, player)
     system 'clear'
-    @board.update_board(player, spot)
+    @board.update_board(player.marker, spot)
     display_board
-    puts "\e[32m"+"#{player} takes spot #{spot}"+"\e[0m"
+    puts "\e[32m"+"#{player.name} (#{player.marker}) takes spot #{spot}"+"\e[0m"
   end
 
-  def get_best_move(board, next_player, depth = 0, best_score = {})
+  def get_best_move(board, player, depth = 0, best_score = {})
     board.available_spaces.each do |space|
-      board.values[space] = @player2.marker
+      board.values[space] = player.marker
       # board.update_board(@player2.marker, space)
       if board.has_been_won?
         return space
       else
-        board.values[space] = @player1.marker
+        board.values[space] = other_player(player).marker
         # board.update_board(@player1.marker, space)
         if board.has_been_won?
           return space
@@ -200,6 +209,11 @@ class Game
       end
     end
     return board.available_spaces.sample
+  end
+
+  def other_player(current_player)
+    return @player2 if current_player == @player1
+    return @player1 if current_player == @player2
   end
 end
 
