@@ -69,7 +69,7 @@ class Game
       " ---|---|---",
       "  #{@board.values[6]} | #{@board.values[7]} | #{@board.values[8]}",
       "",
-      ].join("\n") + "\n"
+    ].join("\n") + "\n"
   end
 
   def get_user_move
@@ -92,17 +92,17 @@ class Game
   end
 
   def get_computer_move
+    sleep 1
     if @board.values[4] == 4
-      sleep 1
       make_move(4, @computer)
     else
       spot = get_best_move(@board.clone, @computer)
-      sleep 1
       make_move(spot, @computer)
     end
   end
 
   def make_move(spot, player)
+    system 'clear'
     @board.update_board(player, spot)
     display_board
     puts "\e[32m"+"#{player} takes spot #{spot}"+"\e[0m"
