@@ -62,7 +62,8 @@ class Game
     mode = select_game_mode
     set_game_mode(mode)
     select_markers
-    select_first_player
+    first = select_first_player
+    set_first_player(first)
     p @player1
     p @player2
     display_board
