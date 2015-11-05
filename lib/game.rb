@@ -21,13 +21,18 @@ class Game
 
     @view.display_board(@board)
 
+    play_game
+
+    @view.game_over
+  end
+
+  def play_game
     while true
       player_turn(@first_player)
-      break if game_over?
+      return if game_over?
       player_turn(@second_player)
-      break if game_over?
+      return if game_over?
     end
-    @view.game_over
   end
 
   def player_turn(player)

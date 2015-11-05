@@ -100,6 +100,7 @@ class View
 
   def commentary(player, spot)
     puts "\e[32m"+"#{player.name} '#{player.marker}' takes spot #{spot}"+"\e[0m"
+    puts ""
   end
 
   def win
