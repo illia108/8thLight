@@ -24,16 +24,16 @@ class View
       "    _| |_     |  \\  `--'  /  |  _| |___/ |  ",
       "   |_____|    |   `.____.'   | |_________|  ",
     ].join("\n") + "\n"
-  sleep 0.5
-end
+    sleep 0.5
+  end
 
   def select_game_mode
     sleep 0.5
     puts ""
     puts "What type of game would you like to play?"
-    puts "1) Human v. Human"
-    puts "2) Computer v. Computer"
-    puts "3) Human v. Computer"
+    puts "[1] Human v. Human"
+    puts "[2] Computer v. Computer"
+    puts "[3] Human v. Computer"
     return gets.chomp
   end
 
@@ -41,15 +41,15 @@ end
     sleep 0.5
     puts ""
     puts "Who will go first?"
-    puts "1) #{player1.name} '#{player1.marker}'"
-    puts "2) #{player2.name} '#{player2.marker}'"
+    puts "[1] #{player1.name} '#{player1.marker}'"
+    puts "[2] #{player2.name} '#{player2.marker}'"
     return gets.chomp
   end
 
   def get_user_marker(player)
     sleep 0.5
     puts ""
-    puts "Enter a marker for #{player.name}"
+    puts "Please enter a marker (X, O or any letter) for #{player.name}"
     return gets.chomp
   end
 
@@ -67,7 +67,7 @@ end
   end
 
   def prompt_user_move(player)
-    puts "#{player.name} '#{player.marker}': Please select your spot."
+    puts "#{player.name} '#{player.marker}': Please enter the number of the cell you would like to take."
   end
 
   def invalid_mode
@@ -99,19 +99,20 @@ end
   end
 
   def commentary(player, spot)
-    puts "\e[32m"+"#{player.name} '#{player.marker}' takes spot #{spot}"+"\e[0m"
+    puts "\e[32m"+"#{player.name} '#{player.marker}' takes position #{spot}"+"\e[0m"
+    puts ""
   end
 
   def win
-    puts "Game Won"
+    puts "Game Won!"
   end
 
   def tie
-    puts "It's a Tie"
+    puts "It's a Tie!"
   end
 
   def game_over
-    puts "End"
+    puts "Thanks for playing!"
   end
 
   def clear
