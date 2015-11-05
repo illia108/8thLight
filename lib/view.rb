@@ -1,10 +1,13 @@
 class View
   def welcome
+    clear
     puts "Welcome to my Tic Tac Toe game"
   end
 
   def select_game_mode
-    puts "What type of game would you like to play"
+    sleep 1
+    puts ""
+    puts "What type of game would you like to play?"
     puts "1) Human v Human"
     puts "2) Computer v Computer"
     puts "3) Human v Computer"
@@ -12,6 +15,8 @@ class View
   end
 
   def select_first_player(player1, player2)
+    sleep 0.5
+    puts ""
     puts "Who will go first?"
     puts "1) #{player1.name} '#{player1.marker}'"
     puts "2) #{player2.name} '#{player2.marker}'"
@@ -19,7 +24,9 @@ class View
   end
 
   def get_user_marker(player)
-    puts "Enter marker for #{player.name}"
+    sleep 0.5
+    puts ""
+    puts "Enter a marker for #{player.name}"
     return gets.chomp
   end
 
@@ -40,17 +47,32 @@ class View
     puts "#{player.name} '#{player.marker}': Please select your spot."
   end
 
+  def invalid_mode
+    puts ""
+    puts "\e[31m"+"Please enter a valid mode value"+"\e[0m"
+    puts "Valid values: 1, 2, 3"
+  end
+
+  def invalid_player
+    puts ""
+    puts "\e[31m"+"Please enter a valid player value"+"\e[0m"
+    puts "Valid values: 1, 2"
+  end
+
   def invalid_move(board)
+    puts ""
     puts "\e[31m"+"Please enter a valid value"+"\e[0m"
     puts "Valid values: #{board.available_spaces}"
   end
 
   def marker_in_use(player)
+    puts ""
     puts "\e[31m"+"#{player.name} is using this marker, please choose another"+"\e[0m"
   end
 
   def invalid_marker
-    puts "\e[31m"+"Please enter a unique single non-digit character"+"\e[0m"
+    puts ""
+    puts "\e[31m"+"Please enter a single non-digit character"+"\e[0m"
   end
 
   def commentary(player, spot)
