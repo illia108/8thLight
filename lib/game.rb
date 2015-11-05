@@ -62,7 +62,9 @@ class Game
   def set_marker(player)
     until player.marker
       marker = @view.get_user_marker(player)
-      if /^\D$/ === marker
+      if marker == other_player(player).marker
+        @view.marker_in_use(other_player(player))
+      elsif /^\D$/ === marker
         player.marker = marker
       else
         @view.invalid_marker
@@ -122,7 +124,7 @@ class Game
   end
 
   def make_move(spot, player)
-    @view.clear
+    # @view.clear
     @board.update_board(player.marker, spot)
     @view.display_board(@board)
     @view.commentary(player, spot)

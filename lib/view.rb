@@ -13,8 +13,8 @@ class View
 
   def select_first_player(player1, player2)
     puts "Who will go first?"
-    puts "1) #{player1.name}"
-    puts "2) #{player2.name}"
+    puts "1) #{player1.name} '#{player1.marker}'"
+    puts "2) #{player2.name} '#{player2.marker}'"
     return gets.chomp
   end
 
@@ -24,6 +24,7 @@ class View
   end
 
   def display_board(board)
+    clear
     puts [
       "",
       "  #{board.values[0]} | #{board.values[1]} | #{board.values[2]}",
@@ -36,7 +37,7 @@ class View
   end
 
   def prompt_user_move(player)
-    puts "#{player.name} (#{player.marker}): Please select your spot."
+    puts "#{player.name} '#{player.marker}': Please select your spot."
   end
 
   def invalid_move(board)
@@ -44,12 +45,16 @@ class View
     puts "Valid values: #{board.available_spaces}"
   end
 
+  def marker_in_use(player)
+    puts "\e[31m"+"#{player.name} is using this marker, please choose another"+"\e[0m"
+  end
+
   def invalid_marker
-    puts "\e[31m"+"Please enter a single non-digit character"+"\e[0m"
+    puts "\e[31m"+"Please enter a unique single non-digit character"+"\e[0m"
   end
 
   def commentary(player, spot)
-    puts "\e[32m"+"#{player.name} (#{player.marker}) takes spot #{spot}"+"\e[0m"
+    puts "\e[32m"+"#{player.name} '#{player.marker}' takes spot #{spot}"+"\e[0m"
   end
 
   def win
