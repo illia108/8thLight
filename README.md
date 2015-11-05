@@ -1,3 +1,3 @@
 Readme
 
-Run the game in lib/game.rb
+Run the game in lib/runner.rb
