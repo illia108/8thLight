@@ -1,17 +1,39 @@
 class View
   def welcome
     clear
-    puts "Welcome to my Tic Tac Toe game"
-    sleep 0.5
-  end
+    # puts "Welcome to my Tic Tac Toe game"
+    puts [
+      "  _________   |     _____    |     ______   ",
+      " |  _   _  |  |    |_   _|   |   .' ___  |  ",
+      " |_/ | | \\_|  |      | |     |  / .'   \\_|  ",
+      "     | |      |      | |     |  | |         ",
+      "    _| |_     |     _| |_    |  \\ `.___.'\\  ",
+      "   |_____|    |    |_____|   |   `._____.'  ",
+      "--------------'--------------'--------------",
+      "  _________   |      __      |     ______   ",
+      " |  _   _  |  |     /  \\     |   .' ___  |  ",
+      " |_/ | | \\_|  |    / /\\ \\    |  / .'   \\_|  ",
+      "     | |      |   / ____ \\   |  | |         ",
+      "    _| |_     | _/ /    \\ \\_ |  \\ `.___.'\\  ",
+      "   |_____|    ||____|  |____||   `._____.'  ",
+      "--------------'--------------'--------------",
+      "  _________   |     ____     |  _________   ",
+      " |  _   _  |  |   .'    `.   | |_   ___  |  ",
+      " |_/ | | \\_|  |  /  .--.  \\  |   | |_  \\_|  ",
+      "     | |      |  | |    | |  |   |  _|  _   ",
+      "    _| |_     |  \\  `--'  /  |  _| |___/ |  ",
+      "   |_____|    |   `.____.'   | |_________|  ",
+    ].join("\n") + "\n"
+  sleep 0.5
+end
 
   def select_game_mode
     sleep 0.5
     puts ""
     puts "What type of game would you like to play?"
-    puts "1) Human v Human"
-    puts "2) Computer v Computer"
-    puts "3) Human v Computer"
+    puts "1) Human v. Human"
+    puts "2) Computer v. Computer"
+    puts "3) Human v. Computer"
     return gets.chomp
   end
 
