@@ -1,6 +1,3 @@
-require_relative 'player'
-require_relative 'board'
-
 class View
   def welcome
     puts "Welcome to my Tic Tac Toe game"
