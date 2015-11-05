@@ -24,8 +24,8 @@ class View
       "    _| |_     |  \\  `--'  /  |  _| |___/ |  ",
       "   |_____|    |   `.____.'   | |_________|  ",
     ].join("\n") + "\n"
-  sleep 0.5
-end
+    sleep 0.5
+  end
 
   def select_game_mode
     sleep 0.5
@@ -103,15 +103,15 @@ end
   end
 
   def win
-    puts "Game Won"
+    puts "Game Won!"
   end
 
   def tie
-    puts "It's a Tie"
+    puts "It's a Tie!"
   end
 
   def game_over
-    puts "End"
+    puts "Thanks for playing!"
   end
 
   def clear
