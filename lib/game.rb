@@ -8,18 +8,24 @@ class Game
     @player1 = nil
     @player2 = nil
     @view = View.new
+    @first_player = nil
+    @second_player = nil
   end
 
   def start_game
     @view.welcome
 
-    mode = @view.select_game_mode
-    set_game_mode(mode)
+    until @player1
+      mode = @view.select_game_mode
+      set_game_mode(mode)
+    end
 
     select_markers
 
-    first = @view.select_first_player(@player1, @player2)
-    set_first_player(first)
+    until @first_player
+      first = @view.select_first_player(@player1, @player2)
+      set_first_player(first)
+    end
 
     @view.display_board(@board)
 
@@ -51,6 +57,8 @@ class Game
     when '3'
       @player1 = Player.new({name: "Player", human: true})
       @player2 = Player.new({name: "Computer", human: false})
+    else
+      @view.invalid_mode
     end
   end
 
@@ -62,7 +70,9 @@ class Game
   def set_marker(player)
     until player.marker
       marker = @view.get_user_marker(player)
-      if /^\D$/ === marker
+      if marker == other_player(player).marker
+        @view.marker_in_use(other_player(player))
+      elsif /^\D$/ === marker
         player.marker = marker
       else
         @view.invalid_marker
@@ -78,6 +88,8 @@ class Game
     when "2"
       @first_player = @player2
       @second_player = @player1
+    else
+      @view.invalid_player
     end
 
   end
@@ -122,7 +134,7 @@ class Game
   end
 
   def make_move(spot, player)
-    @view.clear
+    # @view.clear
     @board.update_board(player.marker, spot)
     @view.display_board(@board)
     @view.commentary(player, spot)
