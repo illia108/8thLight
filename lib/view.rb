@@ -2,10 +2,11 @@ class View
   def welcome
     clear
     puts "Welcome to my Tic Tac Toe game"
+    sleep 0.5
   end
 
   def select_game_mode
-    sleep 1
+    sleep 0.5
     puts ""
     puts "What type of game would you like to play?"
     puts "1) Human v Human"
