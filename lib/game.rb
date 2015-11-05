@@ -15,17 +15,9 @@ class Game
   def start_game
     @view.welcome
 
-    until @player1
-      mode = @view.select_game_mode
-      set_game_mode(mode)
-    end
-
+    set_game_mode
     select_markers
-
-    until @first_player
-      first = @view.select_first_player(@player1, @player2)
-      set_first_player(first)
-    end
+    set_player_order
 
     @view.display_board(@board)
 
@@ -46,19 +38,22 @@ class Game
     end
   end
 
-  def set_game_mode(mode)
-    case mode
-    when '1'
-      @player1 = Player.new({name: "Player1", human: true})
-      @player2 = Player.new({name: "Player2", human: true})
-    when '2'
-      @player1 = Player.new({name: "Computer1", human: false})
-      @player2 = Player.new({name: "Computer2", human: false})
-    when '3'
-      @player1 = Player.new({name: "Player", human: true})
-      @player2 = Player.new({name: "Computer", human: false})
-    else
-      @view.invalid_mode
+  def set_game_mode
+    until @player1
+      mode = @view.select_game_mode
+      case mode
+      when '1'
+        @player1 = Player.new({name: "Player1", human: true})
+        @player2 = Player.new({name: "Player2", human: true})
+      when '2'
+        @player1 = Player.new({name: "Computer1", human: false})
+        @player2 = Player.new({name: "Computer2", human: false})
+      when '3'
+        @player1 = Player.new({name: "Player", human: true})
+        @player2 = Player.new({name: "Computer", human: false})
+      else
+        @view.invalid_mode
+      end
     end
   end
 
@@ -80,18 +75,20 @@ class Game
     end
   end
 
-  def set_first_player(first)
-    case first
-    when "1"
-      @first_player = @player1
-      @second_player = @player2
-    when "2"
-      @first_player = @player2
-      @second_player = @player1
-    else
-      @view.invalid_player
+  def set_player_order
+    until @first_player
+      first = @view.select_first_player(@player1, @player2)
+      case first
+      when "1"
+        @first_player = @player1
+        @second_player = @player2
+      when "2"
+        @first_player = @player2
+        @second_player = @player1
+      else
+        @view.invalid_player
+      end
     end
-
   end
 
   def game_over?
