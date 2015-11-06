@@ -41,8 +41,8 @@ class View
     sleep 0.5
     puts ""
     puts "Who will go first?"
-    puts "[1] #{player1.name} '#{player1.marker}'"
-    puts "[2] #{player2.name} '#{player2.marker}'"
+    puts "[1] #{player1.name}"
+    puts "[2] #{player2.name}"
     return gets.chomp
   end
 
@@ -103,8 +103,8 @@ class View
     puts ""
   end
 
-  def win
-    puts "Game Won!"
+  def win(player)
+    puts "#{player.name} Wins!"
   end
 
   def tie

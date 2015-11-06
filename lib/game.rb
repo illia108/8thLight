@@ -8,16 +8,16 @@ class Game
     @player1 = nil
     @player2 = nil
     @view = View.new
-    @first_player = nil
-    @second_player = nil
+    @active_player = nil
+    @opponent = nil
   end
 
   def start_game
     @view.welcome
 
     set_game_mode
-    select_markers
     set_player_order
+    select_markers
 
     @view.display_board(@board)
 
@@ -28,18 +28,27 @@ class Game
 
   def play_game
     while true
-      player_turn(@first_player)
+      player_turn
       return if game_over?
-      player_turn(@second_player)
-      return if game_over?
+      switch_active_player
     end
   end
 
-  def player_turn(player)
-    if player.human
-      get_user_move(player)
+  def player_turn
+    if @active_player.human
+      get_user_move
     else
-      get_computer_move(player)
+      get_computer_move
+    end
+  end
+
+  def switch_active_player
+    if @active_player == @player1
+      @active_player = @player2
+      @opponent = @player1
+    else
+      @active_player = @player1
+      @opponent = @player2
     end
   end
 
@@ -63,17 +72,19 @@ class Game
   end
 
   def select_markers
-    set_marker(@player1)
-    set_marker(@player2)
+    until @active_player.marker && @opponent.marker
+      set_marker
+      switch_active_player
+    end
   end
 
-  def set_marker(player)
-    until player.marker
-      marker = @view.get_user_marker(player)
-      if marker == other_player(player).marker
-        @view.marker_in_use(other_player(player))
+  def set_marker
+    until @active_player.marker
+      marker = @view.get_user_marker(@active_player)
+      if marker == @opponent.marker
+        @view.marker_in_use(@opponent)
       elsif /^\D$/ === marker
-        player.marker = marker
+        @active_player.marker = marker
       else
         @view.invalid_marker
       end
@@ -81,15 +92,15 @@ class Game
   end
 
   def set_player_order
-    until @first_player
+    until @active_player
       first = @view.select_first_player(@player1, @player2)
       case first
       when "1"
-        @first_player = @player1
-        @second_player = @player2
+        @active_player = @player1
+        @opponent = @player2
       when "2"
-        @first_player = @player2
-        @second_player = @player1
+        @active_player = @player2
+        @opponent = @player1
       else
         @view.invalid_player
       end
@@ -97,8 +108,8 @@ class Game
   end
 
   def game_over?
-    if @board.has_been_won?
-      @view.win
+    if @board.has_been_won?(@active_player)
+      @view.win(@active_player)
       return true
     end
     if @board.tie?
@@ -107,13 +118,13 @@ class Game
     end
   end
 
-  def get_user_move(player)
-    @view.prompt_user_move(player)
+  def get_user_move
+    @view.prompt_user_move(@active_player)
     spot = nil
     until spot
       spot = gets.chomp
       if valid_input?(spot)
-        make_move(spot.to_i, player)
+        make_move(spot.to_i)
       else
         @view.invalid_move(@board)
         spot = nil
@@ -125,40 +136,59 @@ class Game
     /^\d{1}$/ === spot && @board.available_spaces.include?(spot.to_i)
   end
 
-  def get_computer_move(player)
+  def get_computer_move
     sleep 1
     if @board.values[4] == 4
-      make_move(4, player)
+      make_move(4)
     else
-      spot = get_best_move(@board.clone, player)
-      make_move(spot, player)
+      get_best_move(@board, @active_player)
+      make_move(@choice)
     end
   end
 
-  def make_move(spot, player)
-    # @view.clear
-    @board.update_board(player.marker, spot)
+  def make_move(spot)
+    @board.update_board(@active_player.marker, spot)
     @view.display_board(@board)
-    @view.commentary(player, spot)
+    @view.commentary(@active_player, spot)
   end
 
-  def get_best_move(board, player, depth = 0, best_score = {})
-    board.available_spaces.each do |space|
-      board.values[space] = player.marker
-      # board.update_board(@player2.marker, space)
-      if board.has_been_won?
-        return space
-      else
-        board.values[space] = other_player(player).marker
-        # board.update_board(@player1.marker, space)
-        if board.has_been_won?
-          return space
-        else
-          board.values[space] = space
-        end
-      end
+  def score(board, depth)
+    if board.has_been_won?(@active_player)
+      return 10 - depth
+    elsif board.has_been_won?(@opponent)
+      return depth - 10
+    else
+      return 0
     end
-    return board.available_spaces.sample
+  end
+
+  def get_best_move(board, player, depth = 0)
+    return score(board, depth) if board.has_been_won? || board.tie?
+    depth += 1
+    scores = {}
+
+    board.available_spaces.each do |move|
+      possible_board = board_copy(board)
+      possible_board.update_board(player.marker, move)
+      scores[move] = get_best_move(possible_board, other_player(player), depth)
+    end
+
+    if player == @active_player
+      best_score = scores.max_by{|move, score| score}
+      @choice = best_score[0]  #move
+      return best_score[1]     #score
+    else
+      best_score = scores.min_by{|move, score| score}
+      @choice = best_score[0]  #move
+      return best_score[1]     #score
+    end
+  end
+
+  def board_copy(board)
+    temp_board = Board.new
+    temp_board.values = board.values.clone
+    temp_board.available_spaces = board.available_spaces.clone
+    return temp_board
   end
 
   def other_player(current_player)
