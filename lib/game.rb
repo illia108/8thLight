@@ -138,9 +138,9 @@ class Game
   end
 
   def score(board, depth)
-    if board.has_been_won?(@active_player)
+    if board.won?(@active_player)
       return 10 - depth
-    elsif board.has_been_won?(@opponent)
+    elsif board.won?(@opponent)
       return depth - 10
     else
       return 0
@@ -148,7 +148,7 @@ class Game
   end
 
   def get_best_move(board, player, depth = 0)
-    return score(board, depth) if board.has_been_won? || board.tie?
+    return score(board, depth) if board.won? || board.tie?
     depth += 1
     scores = {}
 
@@ -182,7 +182,7 @@ class Game
   end
 
   def game_over?
-    if @board.has_been_won?(@active_player)
+    if @board.won?(@active_player)
       @view.win(@active_player)
       return true
     end
