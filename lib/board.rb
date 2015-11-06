@@ -36,6 +36,6 @@ class Board
   end
 
   def tie?
-    @available_spaces.empty?
+    !won? && @available_spaces.empty?
   end
 end
