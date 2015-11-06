@@ -175,15 +175,7 @@ class Game
   end
 
   def get_best_move(board, player, depth = 0, best_score = {})
-    # return score(board) if game_over?
-    # depth += 1
-
     board.available_spaces.each do |space|
-      # board.values[space] = player.marker
-      # possible_game = game.get_new_state(move)
-      # scores.push minimax(board, depth)
-      # moves.push move
-
       board.values[space] = player.marker
       # board.update_board(@player2.marker, space)
       if board.has_been_won?
