@@ -90,13 +90,7 @@ class Game
   end
 
   def switch_active_player
-    if @active_player == @player1
-      @active_player = @player2
-      @opponent = @player1
-    else
-      @active_player = @player1
-      @opponent = @player2
-    end
+    @active_player, @opponent = @opponent, @active_player
   end
 
   def player_turn
