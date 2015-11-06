@@ -10,11 +10,9 @@ describe Board do
     it "should be a Board" do
       expect(board).to be_a(Board)
     end
-
     it "board should be empty" do
       expect(board.values).to eq(values)
     end
-
     it "board.available_spaces should contain all spaces" do
       expect(board.available_spaces).to eq(values)
     end
@@ -22,11 +20,9 @@ describe Board do
 
   context "update_board" do
     before { board.update_board("X", 0) }
-
     it "should update the board" do
       expect(board.values[0]).to eq("X")
     end
-
     it "should remove the chosen space from available_spaces" do
       expect(board.available_spaces).to_not include(0)
     end
