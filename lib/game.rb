@@ -8,7 +8,6 @@ class Game
     @player1 = nil
     @player2 = nil
     @view = View.new
-    # @first_player = nil
     @active_player = nil
     @opponent = nil
   end
@@ -27,18 +26,11 @@ class Game
     @view.game_over
   end
 
-  # def play_game
-  #   while true
-  #     player_turn(@first_player)
-  #     return if game_over?
-  #     player_turn(@second_player)
-  #     return if game_over?
-  #   end
-  # end
   def play_game
     while true
       player_turn
       return if game_over?
+      switch_active_player
     end
   end
 
@@ -48,7 +40,6 @@ class Game
     else
       get_computer_move
     end
-    switch_active_player
   end
 
   def switch_active_player
@@ -85,8 +76,6 @@ class Game
       set_marker
       switch_active_player
     end
-    # set_marker(@player1)
-    # set_marker(@player2)
   end
 
   def set_marker
@@ -119,8 +108,8 @@ class Game
   end
 
   def game_over?
-    if @board.has_been_won?
-      @view.win
+    if @board.has_been_won?(@active_player)
+      @view.win(@active_player)
       return true
     end
     if @board.tie?
@@ -158,7 +147,6 @@ class Game
   end
 
   def make_move(spot)
-    # @view.clear
     @board.update_board(@active_player.marker, spot)
     @view.display_board(@board)
     @view.commentary(@active_player, spot)
@@ -178,12 +166,12 @@ class Game
     board.available_spaces.each do |space|
       board.values[space] = player.marker
       # board.update_board(@player2.marker, space)
-      if board.has_been_won?
+      if board.has_been_won?(player)
         return space
       else
         board.values[space] = other_player(player).marker
         # board.update_board(@player1.marker, space)
-        if board.has_been_won?
+        if board.has_been_won?(other_player(player))
           return space
         else
           board.values[space] = space

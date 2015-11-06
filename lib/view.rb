@@ -103,8 +103,8 @@ class View
     puts ""
   end
 
-  def win
-    puts "Game Won!"
+  def win(player)
+    puts "#{player.name} Wins!"
   end
 
   def tie
