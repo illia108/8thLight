@@ -11,7 +11,7 @@ class Board
     @available_spaces.delete(space)
   end
 
-  def has_been_won?(player = nil)
+  def won?(player = nil)
     tic_tac_toes = [
       [0, 1, 2],
       [3, 4, 5],
