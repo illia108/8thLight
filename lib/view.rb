@@ -99,8 +99,8 @@ class View
     puts "\e[31m"+"Please enter a single non-digit character"+"\e[0m"
   end
 
-  def commentary(player, spot)
-    puts "\e[32m"+"#{player.name} '#{player.marker}' takes position #{spot}"+"\e[0m"
+  def commentary(player, space)
+    puts "\e[32m"+"#{player.name} '#{player.marker}' takes position #{space}"+"\e[0m"
     puts ""
   end
 

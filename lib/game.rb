@@ -103,20 +103,20 @@ class Game
 
   def get_user_move
     @view.prompt_user_move(@active_player)
-    spot = nil
-    until spot
-      spot = gets.chomp
-      if valid_input?(spot)
-        make_move(spot.to_i)
+    space = nil
+    until space
+      space = gets.chomp
+      if valid_input?(space)
+        make_move(space.to_i)
       else
         @view.invalid_move(@board)
-        spot = nil
+        space = nil
       end
     end
   end
 
-  def valid_input?(spot)
-    /^\d{1}$/ === spot && @board.available_spaces.include?(spot.to_i)
+  def valid_input?(space)
+    /^\d{1}$/ === space && @board.available_spaces.include?(space.to_i)
   end
 
   def get_computer_move
@@ -129,10 +129,10 @@ class Game
     end
   end
 
-  def make_move(spot)
-    @board.update_board(@active_player.marker, spot)
+  def make_move(space)
+    @board.update_board(@active_player.marker, space)
     @view.display_board(@board)
-    @view.commentary(@active_player, spot)
+    @view.commentary(@active_player, space)
   end
 
   def score(board, depth)
@@ -150,19 +150,19 @@ class Game
     depth += 1
     scores = {}
 
-    board.available_spaces.each do |move|
+    board.available_spaces.each do |space|
       possible_board = board_copy(board)
-      possible_board.update_board(player.marker, move)
-      scores[move] = get_best_move(possible_board, next_player(player), depth)
+      possible_board.update_board(player.marker, space)
+      scores[space] = get_best_move(possible_board, next_player(player), depth)
     end
 
     if player == @active_player
-      best_score = scores.max_by{|move, score| score}
-      @choice = best_score[0]  #move
+      best_score = scores.max_by{|space, score| score}
+      @choice = best_score[0]  #space
       return best_score[1]     #score
     else
-      best_score = scores.min_by{|move, score| score}
-      @choice = best_score[0]  #move
+      best_score = scores.min_by{|space, score| score}
+      @choice = best_score[0]  #space
       return best_score[1]     #score
     end
   end
