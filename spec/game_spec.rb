@@ -26,10 +26,10 @@ describe Game do
     end
 
     it "should generate nil variables" do
-      expect(game.player1).to eq nil
-      expect(game.player2).to eq nil
-      expect(game.active_player).to eq nil
-      expect(game.opponent).to eq nil
+      expect(game.player1).to be_nil
+      expect(game.player2).to be_nil
+      expect(game.active_player).to be_nil
+      expect(game.opponent).to be_nil
     end
   end
 end
