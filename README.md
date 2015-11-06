@@ -4,6 +4,8 @@ Clone the repo `git clone https://github.com/KeithConroy/8thLight`
 
 Run the game `ruby lib/runner.rb`
 
+Run the tests `rspec`
+
 ###Features
 * Three game modes
   * Human v. Human
