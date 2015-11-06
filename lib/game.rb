@@ -26,32 +26,6 @@ class Game
     @view.game_over
   end
 
-  def play_game
-    while true
-      player_turn
-      return if game_over?
-      switch_active_player
-    end
-  end
-
-  def player_turn
-    if @active_player.human
-      get_user_move
-    else
-      get_computer_move
-    end
-  end
-
-  def switch_active_player
-    if @active_player == @player1
-      @active_player = @player2
-      @opponent = @player1
-    else
-      @active_player = @player1
-      @opponent = @player2
-    end
-  end
-
   def set_game_mode
     until @player1
       mode = @view.select_game_mode
@@ -67,6 +41,22 @@ class Game
         @player2 = Player.new({name: "Computer", human: false})
       else
         @view.invalid_mode
+      end
+    end
+  end
+
+  def set_player_order
+    until @active_player
+      first = @view.select_first_player(@player1, @player2)
+      case first
+      when "1"
+        @active_player = @player1
+        @opponent = @player2
+      when "2"
+        @active_player = @player2
+        @opponent = @player1
+      else
+        @view.invalid_player
       end
     end
   end
@@ -91,30 +81,29 @@ class Game
     end
   end
 
-  def set_player_order
-    until @active_player
-      first = @view.select_first_player(@player1, @player2)
-      case first
-      when "1"
-        @active_player = @player1
-        @opponent = @player2
-      when "2"
-        @active_player = @player2
-        @opponent = @player1
-      else
-        @view.invalid_player
-      end
+  def play_game
+    while true
+      player_turn
+      return if game_over?
+      switch_active_player
     end
   end
 
-  def game_over?
-    if @board.has_been_won?(@active_player)
-      @view.win(@active_player)
-      return true
+  def switch_active_player
+    if @active_player == @player1
+      @active_player = @player2
+      @opponent = @player1
+    else
+      @active_player = @player1
+      @opponent = @player2
     end
-    if @board.tie?
-      @view.tie
-      return true
+  end
+
+  def player_turn
+    if @active_player.human
+      get_user_move
+    else
+      get_computer_move
     end
   end
 
@@ -170,7 +159,7 @@ class Game
     board.available_spaces.each do |move|
       possible_board = board_copy(board)
       possible_board.update_board(player.marker, move)
-      scores[move] = get_best_move(possible_board, other_player(player), depth)
+      scores[move] = get_best_move(possible_board, next_player(player), depth)
     end
 
     if player == @active_player
@@ -191,9 +180,20 @@ class Game
     return temp_board
   end
 
-  def other_player(current_player)
+  def next_player(current_player)
     return @player2 if current_player == @player1
     return @player1 if current_player == @player2
+  end
+
+  def game_over?
+    if @board.has_been_won?(@active_player)
+      @view.win(@active_player)
+      return true
+    end
+    if @board.tie?
+      @view.tie
+      return true
+    end
   end
 end
 
