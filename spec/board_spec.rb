@@ -56,4 +56,20 @@ describe Board do
       end
     end
   end
+
+  context "tie?" do
+    it "should return true if there is a tie" do
+      board.values = ["X", "X", "O", "O", "O", "X", "X", "O", "O"]
+      board.available_spaces = []
+      expect(board.tie?).to eq true
+    end
+    it "should return false if there is no tie" do
+      board.values = ["X", "X", "X", "O", "O", "X", "X", "O", "O"]
+      board.available_spaces = []
+      expect(board.tie?).to eq false
+      board.values = ["X", "X", 2, "O", "O", "X", "X", "O", "O"]
+      board.available_spaces = [2]
+      expect(board.tie?).to eq false
+    end
+  end
 end
