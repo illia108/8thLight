@@ -6,9 +6,9 @@ class Board
     @available_spaces = [0, 1, 2, 3, 4, 5, 6, 7, 8]
   end
 
-  def update_board(value, position)
-    @values[position] = value
-    @available_spaces.delete(position)
+  def update_board(value, space)
+    @values[space] = value
+    @available_spaces.delete(space)
   end
 
   def has_been_won?(player = nil)
