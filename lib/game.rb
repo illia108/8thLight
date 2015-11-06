@@ -141,7 +141,6 @@ class Game
     if @board.values[4] == 4
       make_move(4)
     else
-      # spot = get_best_move(@board.clone, @active_player)
       get_best_move(@board, @active_player)
       make_move(@choice)
     end
@@ -166,22 +165,22 @@ class Game
   def get_best_move(board, player, depth = 0)
     return score(board, depth) if board.has_been_won? || board.tie?
     depth += 1
-    best_score = {}
+    scores = {}
 
     board.available_spaces.each do |move|
       possible_board = board_copy(board)
       possible_board.update_board(player.marker, move)
-      best_score[move] = get_best_move(possible_board, other_player(player), depth)
+      scores[move] = get_best_move(possible_board, other_player(player), depth)
     end
 
     if player == @active_player
-      best = best_score.max_by{|move, score| score}
-      @choice = best[0]
-      return best[1]
+      best_score = scores.max_by{|move, score| score}
+      @choice = best_score[0]  #move
+      return best_score[1]     #score
     else
-      best = best_score.min_by{|move, score| score}
-      @choice = best[0]
-      return best[1]
+      best_score = scores.min_by{|move, score| score}
+      @choice = best_score[0]  #move
+      return best_score[1]     #score
     end
   end
 
@@ -191,25 +190,6 @@ class Game
     temp_board.available_spaces = board.available_spaces.clone
     return temp_board
   end
-
-  # def get_best_move(board, player, depth = 0, best_score = {})
-  #   board.available_spaces.each do |space|
-  #     board.values[space] = player.marker
-  #     # board.update_board(@player2.marker, space)
-  #     if board.has_been_won?(player)
-  #       return space
-  #     else
-  #       board.values[space] = other_player(player).marker
-  #       # board.update_board(@player1.marker, space)
-  #       if board.has_been_won?(other_player(player))
-  #         return space
-  #       else
-  #         board.values[space] = space
-  #       end
-  #     end
-  #   end
-  #   return board.available_spaces.sample
-  # end
 
   def other_player(current_player)
     return @player2 if current_player == @player1
