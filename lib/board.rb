@@ -11,7 +11,7 @@ class Board
     @available_spaces.delete(position)
   end
 
-  def has_been_won?(player)
+  def has_been_won?(player = nil)
     # [@values[0], @values[1], @values[2]].uniq.length == 1 ||
     # [@values[3], @values[4], @values[5]].uniq.length == 1 ||
     # [@values[6], @values[7], @values[8]].uniq.length == 1 ||
@@ -33,7 +33,11 @@ class Board
     tic_tac_toes.each do |row|
       # next if row.any? {|cell| @available_spaces.include?(cell)}
       if [@values[row[0]], @values[row[1]], @values[row[2]]].uniq.length == 1
-        return true if @values[row[0]] == player.marker
+        if player
+          return true if @values[row[0]] == player.marker
+        else
+          return true
+        end
       end
     end
     return false

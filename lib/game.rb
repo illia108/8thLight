@@ -141,8 +141,9 @@ class Game
     if @board.values[4] == 4
       make_move(4)
     else
-      spot = get_best_move(@board.clone, @active_player)
-      make_move(spot)
+      # spot = get_best_move(@board.clone, @active_player)
+      get_best_move(@board, @active_player)
+      make_move(@choice)
     end
   end
 
@@ -162,24 +163,53 @@ class Game
     end
   end
 
-  def get_best_move(board, player, depth = 0, best_score = {})
-    board.available_spaces.each do |space|
-      board.values[space] = player.marker
-      # board.update_board(@player2.marker, space)
-      if board.has_been_won?(player)
-        return space
-      else
-        board.values[space] = other_player(player).marker
-        # board.update_board(@player1.marker, space)
-        if board.has_been_won?(other_player(player))
-          return space
-        else
-          board.values[space] = space
-        end
-      end
+  def get_best_move(board, player, depth = 0)
+    return score(board, depth) if board.has_been_won? || board.tie?
+    depth += 1
+    best_score = {}
+
+    board.available_spaces.each do |move|
+      possible_board = board_copy(board)
+      possible_board.update_board(player.marker, move)
+      best_score[move] = get_best_move(possible_board, other_player(player), depth)
     end
-    return board.available_spaces.sample
+
+    if player == @active_player
+      best = best_score.max_by{|move, score| score}
+      @choice = best[0]
+      return best[1]
+    else
+      best = best_score.min_by{|move, score| score}
+      @choice = best[0]
+      return best[1]
+    end
   end
+
+  def board_copy(board)
+    temp_board = Board.new
+    temp_board.values = board.values.clone
+    temp_board.available_spaces = board.available_spaces.clone
+    return temp_board
+  end
+
+  # def get_best_move(board, player, depth = 0, best_score = {})
+  #   board.available_spaces.each do |space|
+  #     board.values[space] = player.marker
+  #     # board.update_board(@player2.marker, space)
+  #     if board.has_been_won?(player)
+  #       return space
+  #     else
+  #       board.values[space] = other_player(player).marker
+  #       # board.update_board(@player1.marker, space)
+  #       if board.has_been_won?(other_player(player))
+  #         return space
+  #       else
+  #         board.values[space] = space
+  #       end
+  #     end
+  #   end
+  #   return board.available_spaces.sample
+  # end
 
   def other_player(current_player)
     return @player2 if current_player == @player1
