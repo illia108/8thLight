@@ -3,6 +3,8 @@ require_relative 'player'
 require_relative 'view'
 
 class Game
+  attr_accessor :board, :player1, :player2, :view, :active_player, :opponent
+
   def initialize
     @board = Board.new
     @player1 = nil
