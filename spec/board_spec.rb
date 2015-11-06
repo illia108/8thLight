@@ -17,4 +17,16 @@ describe Board do
       expect(board.available_spaces).to eq(values)
     end
   end
+
+  context "update_board" do
+    before { board.update_board("X", 0) }
+
+    it "should update the board" do
+      expect(board.values[0]).to eq("X")
+    end
+
+    it "should remove the chosen space from available_spaces" do
+      expect(board.available_spaces).to_not include(0)
+    end
+  end
 end
