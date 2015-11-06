@@ -7,4 +7,8 @@ class Player
     @human = args[:human]
   end
 
+  def human?
+    @human
+  end
+
 end

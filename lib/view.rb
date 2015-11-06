@@ -55,7 +55,7 @@ class View
 
   def display_board(board)
     clear
-    puts [
+    pretty_board = [
       "",
       "  #{board.values[0]} | #{board.values[1]} | #{board.values[2]}",
       " ---|---|---",
@@ -64,6 +64,7 @@ class View
       "  #{board.values[6]} | #{board.values[7]} | #{board.values[8]}",
       "",
     ].join("\n") + "\n"
+    puts pretty_board.gsub(/([a-zA-Z])/){ |marker| "\e[32m"+marker+"\e[0m"}
   end
 
   def prompt_user_move(player)

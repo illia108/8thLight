@@ -100,7 +100,7 @@ class Game
   end
 
   def player_turn
-    if @active_player.human
+    if @active_player.human?
       get_user_move
     else
       get_computer_move
