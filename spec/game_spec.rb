@@ -88,6 +88,19 @@ describe Game do
     end
   end
 
+  context "#valid_move?" do
+    it "should return true for valid inputs" do
+      expect(game.valid_move?("1")).to be true
+      expect(game.valid_move?("2")).to be true
+    end
+    it "should return false for invalid inputs" do
+      game.board.available_spaces = [2]
+      expect(game.valid_move?("1")).to be false
+      expect(game.valid_move?("23")).to be false
+      expect(game.valid_move?("three")).to be false
+    end
+  end
+
   context "#won?" do
     it "should return true if game is won" do
       game.board.values = ["X", "X", "X", 3, "O", "O", "O", 7, 8]
