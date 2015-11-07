@@ -3,6 +3,8 @@ require 'spec_helper'
 describe Game do
   let(:game){ Game.new }
   let(:values){ [0,1,2,3,4,5,6,7,8] }
+  let(:playerX){ Player.new({marker: "X"}) }
+  let(:playerO){ Player.new({marker: "O"}) }
 
   context "#initialize" do
     it "should be a Game" do
@@ -72,4 +74,45 @@ describe Game do
       expect{game.switch_active_player}.to change{game.active_player}
     end
   end
+
+  context "#make_move" do
+    before {
+      game.active_player = playerX
+      game.make_move(0)
+    }
+    it "should update the board" do
+      expect(game.board.values[0]).to eq("X")
+    end
+    it "should remove the chosen space from available_spaces" do
+      expect(game.board.available_spaces).to_not include(0)
+    end
+  end
+
+  context "#won?" do
+    it "should return true if game is won" do
+      game.board.values = ["X", "X", "X", 3, "O", "O", "O", 7, 8]
+      expect(game.won?).to eq true
+    end
+    it "should return false if game is not won" do
+      game.board.values = ["X", "X", 2, 3, "O", "O", "O", 7, 8]
+      expect(game.won?).to eq false
+    end
+  end
+
+  context "#tie?" do
+    it "should return true if there is a tie" do
+      game.board.values = ["X", "X", "O", "O", "O", "X", "X", "O", "O"]
+      game.board.available_spaces = []
+      expect(game.tie?).to eq true
+    end
+    it "should return false if there is no tie" do
+      game.board.values = ["X", "X", "X", "O", "O", "X", "X", "O", "O"]
+      game.board.available_spaces = []
+      expect(game.tie?).to eq false
+      game.board.values = ["X", "X", 2, "O", "O", "X", "X", "O", "O"]
+      game.board.available_spaces = [2]
+      expect(game.tie?).to eq false
+    end
+  end
+
 end
