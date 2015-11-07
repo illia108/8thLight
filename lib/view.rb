@@ -113,6 +113,12 @@ class View
     puts "It's a Tie!"
   end
 
+  def play_again?
+    puts "Would you like to play again?"
+    puts "[#{red("Y/N")}]"
+    return gets.chomp
+  end
+
   def game_over
     puts "Thanks for playing!"
   end
