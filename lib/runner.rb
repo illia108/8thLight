@@ -13,10 +13,6 @@ def start_game
   play_game
 end
 
-start_game
-
-
-
 def set_game_mode
   while true
     mode = @view.select_game_mode
@@ -155,3 +151,5 @@ def game_over?
     return true
   end
 end
+
+start_game
