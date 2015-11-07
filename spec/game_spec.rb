@@ -75,6 +75,42 @@ describe Game do
     end
   end
 
+  context "#get_computer_move" do
+    context "winning" do
+      before {
+        game.board.values = [
+          "X", 1, 2,
+          "X", "O", 5,
+          6, "O", 8
+        ]
+        game.board.available_spaces = [1, 2, 5, 6, 8]
+        game.active_player = playerX
+        game.opponent = playerO
+      }
+      it "should return the winning move" do
+        expect(game.get_computer_move).to eq 6
+        game.switch_active_player
+        expect(game.get_computer_move).to eq 1
+      end
+    end
+    context "blocking" do
+      before {
+        game.board.values = [
+          "X", "O", 2,
+          3, "O", 5,
+          6, 7, 8
+        ]
+        game.board.available_spaces = [2, 3, 5, 6, 7, 8]
+        game.active_player = playerX
+        game.opponent = playerO
+      }
+      it "should return the blocking move" do
+        # game.switch_active_player
+        expect(game.get_computer_move).to eq 7
+      end
+    end
+  end
+
   context "#make_move" do
     before {
       game.active_player = playerX
@@ -101,28 +137,71 @@ describe Game do
     end
   end
 
+  context "score" do
+
+  end
+
+  context "get_best_move" do
+
+  end
+
+  context "#board_copy" do
+    it "should return a cloned board" do
+      expect(game.board_copy(game.board)).to_not eq game.board
+    end
+  end
+
+  context "#next_player" do
+    it "should return the next player" do
+      game.active_player = playerX
+      game.opponent = playerO
+      expect(game.next_player(playerX)).to eq playerO
+      expect(game.next_player(playerO)).to eq playerX
+    end
+  end
+
   context "#won?" do
     it "should return true if game is won" do
-      game.board.values = ["X", "X", "X", 3, "O", "O", "O", 7, 8]
+      game.board.values = [
+        "X", "X", "X",
+        3, "O", "O",
+        "O", 7, 8
+      ]
       expect(game.won?).to eq true
     end
     it "should return false if game is not won" do
-      game.board.values = ["X", "X", 2, 3, "O", "O", "O", 7, 8]
+      game.board.values = [
+        "X", "X", 2,
+        3, "O", "O",
+        "O", 7, 8
+      ]
       expect(game.won?).to eq false
     end
   end
 
   context "#tie?" do
     it "should return true if there is a tie" do
-      game.board.values = ["X", "X", "O", "O", "O", "X", "X", "O", "O"]
+      game.board.values = [
+        "X", "X", "O",
+        "O", "O", "X",
+        "X", "O", "O"
+      ]
       game.board.available_spaces = []
       expect(game.tie?).to eq true
     end
     it "should return false if there is no tie" do
-      game.board.values = ["X", "X", "X", "O", "O", "X", "X", "O", "O"]
+      game.board.values = [
+        "X", "X", "X",
+        "O", "O", "X",
+        "X", "O", "O"
+      ]
       game.board.available_spaces = []
       expect(game.tie?).to eq false
-      game.board.values = ["X", "X", 2, "O", "O", "X", "X", "O", "O"]
+      game.board.values = [
+        "X", "X", 2,
+        "O", "O", "X",
+        "X", "O", "O"
+      ]
       game.board.available_spaces = [2]
       expect(game.tie?).to eq false
     end
