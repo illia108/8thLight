@@ -44,6 +44,10 @@ class Game
     @board.update_board(@active_player.marker, space)
   end
 
+  def valid_move?(space)
+    /^\d{1}$/ === space && @board.available_spaces.include?(space.to_i)
+  end
+
   def won?
     @board.won?(@active_player)
   end
