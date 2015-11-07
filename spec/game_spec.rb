@@ -67,6 +67,9 @@ describe Game do
   end
 
   context "switch_active_player" do
-
+    before {game.set_mode("1")}
+    it "should switch players" do
+      expect{game.switch_active_player}.to change{game.active_player}
+    end
   end
 end
