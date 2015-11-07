@@ -105,7 +105,6 @@ describe Game do
         game.opponent = playerO
       }
       it "should return the blocking move" do
-        # game.switch_active_player
         expect(game.get_computer_move).to eq 7
       end
     end
