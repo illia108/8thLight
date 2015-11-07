@@ -64,17 +64,9 @@ end
 def play_game
   @view.display_board(@game.board)
   while true
-    player_turn
+    @game.active_player.human? ? get_user_move : get_computer_move
     break if game_over?
     @game.switch_active_player
-  end
-end
-
-def player_turn
-  if @game.active_player.human?
-    get_user_move
-  else
-    get_computer_move
   end
 end
 
