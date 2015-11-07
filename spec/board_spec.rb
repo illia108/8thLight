@@ -6,7 +6,7 @@ describe Board do
   let(:playerX){ Player.new({marker: "X"}) }
   let(:playerO){ Player.new({marker: "O"}) }
 
-  context "initialize" do
+  context "#initialize" do
     it "should be a Board" do
       expect(board).to be_a(Board)
     end
@@ -18,7 +18,7 @@ describe Board do
     end
   end
 
-  context "update_board" do
+  context "#update_board" do
     before { board.update_board("X", 0) }
     it "should update the board" do
       expect(board.values[0]).to eq("X")
@@ -28,7 +28,7 @@ describe Board do
     end
   end
 
-  context "won?" do
+  context "#won?" do
     context "winner" do
       before { board.values = ["X", "X", "X", 3, "O", "O", "O", 7, 8] }
       it "should return true if board is won (with no player arguement)" do
@@ -53,7 +53,7 @@ describe Board do
     end
   end
 
-  context "tie?" do
+  context "#tie?" do
     it "should return true if there is a tie" do
       board.values = ["X", "X", "O", "O", "O", "X", "X", "O", "O"]
       board.available_spaces = []

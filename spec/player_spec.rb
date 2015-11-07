@@ -4,7 +4,7 @@ describe Player do
   let(:player){ Player.new({name: "Player", human: true}) }
   let(:computer){ Player.new({name: "Computer", human: false}) }
 
-  context "initialize" do
+  context "#initialize" do
     it "should be a Player" do
       expect(player).to be_a(Player)
       expect(computer).to be_a(Player)
@@ -23,7 +23,7 @@ describe Player do
     end
   end
 
-  context "human?" do
+  context "#human?" do
     it "should respond to human? method with boolean" do
       expect(player.human?).to eq(true)
       expect(computer.human?).to eq(false)

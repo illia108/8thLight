@@ -4,7 +4,7 @@ describe Game do
   let(:game){ Game.new }
   let(:values){ [0,1,2,3,4,5,6,7,8] }
 
-  context "initialize" do
+  context "#initialize" do
     it "should be a Game" do
       expect(game).to be_a(Game)
     end
@@ -19,7 +19,7 @@ describe Game do
     end
   end
 
-  context "set_mode" do
+  context "#set_mode" do
     it "should create two human players: mode 1" do
       game.set_mode("1")
       expect(game.active_player.human?).to be true
@@ -47,7 +47,7 @@ describe Game do
     end
   end
 
-  context "set_player_order" do
+  context "#set_player_order" do
     before {game.set_mode("1")}
     it "should not switch players on input of 1" do
       expect{game.set_player_order("1")}.to_not change{game.active_player}
@@ -66,7 +66,7 @@ describe Game do
     end
   end
 
-  context "switch_active_player" do
+  context "#switch_active_player" do
     before {game.set_mode("1")}
     it "should switch players" do
       expect{game.switch_active_player}.to change{game.active_player}
