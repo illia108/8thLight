@@ -20,16 +20,5 @@ describe Game do
     it "board.available_spaces should contain all spaces" do
       expect(game.board.available_spaces).to eq(values)
     end
-
-    it "should generate a view" do
-      expect(game.view).to be_a(View)
-    end
-
-    it "should generate nil variables" do
-      expect(game.player1).to be_nil
-      expect(game.player2).to be_nil
-      expect(game.active_player).to be_nil
-      expect(game.opponent).to be_nil
-    end
   end
 end
