@@ -11,7 +11,7 @@ def start_game
   set_player_order
   select_markers
   play_game
-  start_game if play_again?
+  play_again? ? start_game : @view.game_over
 end
 
 def play_again?
@@ -68,7 +68,6 @@ def play_game
     break if game_over?
     @game.switch_active_player
   end
-  @view.game_over
 end
 
 def player_turn
