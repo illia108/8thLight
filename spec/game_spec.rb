@@ -48,7 +48,22 @@ describe Game do
   end
 
   context "set_player_order" do
-
+    before {game.set_mode("1")}
+    it "should not switch players on input of 1" do
+      expect{game.set_player_order("1")}.to_not change{game.active_player}
+    end
+    it "should switch players on input of 2" do
+      expect{game.set_player_order("2")}.to change{game.active_player}
+    end
+    it "should return true for valid inputs" do
+      expect(game.set_player_order("1")).to be true
+      expect(game.set_player_order("2")).to be true
+    end
+    it "should return false for invalid inputs" do
+      expect(game.set_player_order("K")).to be false
+      expect(game.set_player_order("23")).to be false
+      expect(game.set_player_order("three")).to be false
+    end
   end
 
   context "switch_active_player" do
