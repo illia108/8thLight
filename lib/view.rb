@@ -1,48 +1,48 @@
 class View
+
   def welcome
     clear
-    # puts "Welcome to my Tic Tac Toe game"
-    puts [
-      "  _________   |     _____    |     ______   ",
-      " |  _   _  |  |    |_   _|   |   .' ___  |  ",
-      " |_/ | | \\_|  |      | |     |  / .'   \\_|  ",
-      "     | |      |      | |     |  | |         ",
-      "    _| |_     |     _| |_    |  \\ `.___.'\\  ",
-      "   |_____|    |    |_____|   |   `._____.'  ",
-      "--------------'--------------'--------------",
-      "  _________   |      __      |     ______   ",
-      " |  _   _  |  |     /  \\     |   .' ___  |  ",
-      " |_/ | | \\_|  |    / /\\ \\    |  / .'   \\_|  ",
-      "     | |      |   / ____ \\   |  | |         ",
-      "    _| |_     | _/ /    \\ \\_ |  \\ `.___.'\\  ",
-      "   |_____|    ||____|  |____||   `._____.'  ",
-      "--------------'--------------'--------------",
-      "  _________   |     ____     |  _________   ",
-      " |  _   _  |  |   .'    `.   | |_   ___  |  ",
-      " |_/ | | \\_|  |  /  .--.  \\  |   | |_  \\_|  ",
-      "     | |      |  | |    | |  |   |  _|  _   ",
-      "    _| |_     |  \\  `--'  /  |  _| |___/ |  ",
-      "   |_____|    |   `.____.'   | |_________|  ",
-    ].join("\n") + "\n"
+    tic_tac_toe = [
+      "\e[32m",
+      " _______ _   _______      _______         ",
+      "|__   __(_) |__   __|    |__   __|        ",
+      "   | |   _  ___| | __ _  ___| | ___   ___ ",
+      "   | |  | |/ __| |/ _` |/ __| |/ _ \\ / _ \\",
+      "   | |  | | (__| | (_| | (__| | (_) |  __/",
+      "   |_|  |_|\\___|_|\\__,_|\\___|_|\\___/ \\___|",
+    ].join("\n") + "\e[0m\n"
+    tic_tac_toe.each_char do |char|
+      print char
+      sleep 0.005
+    end
     sleep 0.5
+
   end
 
   def select_game_mode
     sleep 0.5
     puts ""
     puts "What type of game would you like to play?"
-    puts "[1] Human v. Human"
-    puts "[2] Computer v. Computer"
-    puts "[3] Human v. Computer"
+    puts "[#{red(1)}] Human v. Human"
+    puts "[#{red(2)}] Computer v. Computer"
+    puts "[#{red(3)}] Human v. Computer"
     return gets.chomp
+  end
+
+  def red(text)
+    "\e[31m#{text}\e[0m"
+  end
+
+  def green(text)
+    "\e[32m#{text}\e[0m"
   end
 
   def select_first_player(player1, player2)
     sleep 0.5
     puts ""
     puts "Who will go first?"
-    puts "[1] #{player1.name}"
-    puts "[2] #{player2.name}"
+    puts "[#{red(1)}] #{player1.name}"
+    puts "[#{red(2)}] #{player2.name}"
     return gets.chomp
   end
 
@@ -64,39 +64,40 @@ class View
       "  #{board.values[6]} | #{board.values[7]} | #{board.values[8]}",
       "",
     ].join("\n") + "\n"
-    puts pretty_board.gsub(/([a-zA-Z])/){ |marker| "\e[32m"+marker+"\e[0m"}
+    puts pretty_board.gsub(/([a-zA-Z])/){ |marker| green(marker)}
   end
 
   def prompt_user_move(player)
     puts "#{player.name} '#{player.marker}': Please enter the number of the cell you would like to take."
+    return gets.chomp
   end
 
   def invalid_mode
     puts ""
-    puts "\e[31m"+"Please enter a valid mode value"+"\e[0m"
+    puts red("Please enter a valid mode value")
     puts "Valid values: 1, 2, 3"
   end
 
   def invalid_player
     puts ""
-    puts "\e[31m"+"Please enter a valid player value"+"\e[0m"
+    puts red("Please enter a valid player value")
     puts "Valid values: 1, 2"
   end
 
   def invalid_move(board)
     puts ""
-    puts "\e[31m"+"Please enter a valid value"+"\e[0m"
+    puts red("Please enter a valid value")
     puts "Valid values: #{board.available_spaces}"
   end
 
   def marker_in_use(player)
     puts ""
-    puts "\e[31m"+"#{player.name} is using this marker, please choose another"+"\e[0m"
+    puts red("#{player.name} is using this marker, please choose another")
   end
 
   def invalid_marker
     puts ""
-    puts "\e[31m"+"Please enter a single non-digit character"+"\e[0m"
+    puts red("Please enter a single non-digit character")
   end
 
   def commentary(player, space)
