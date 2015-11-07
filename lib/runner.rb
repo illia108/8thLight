@@ -11,6 +11,19 @@ def start_game
   set_player_order
   select_markers
   play_game
+  start_game if play_again?
+end
+
+def play_again?
+  y_or_n = @view.play_again?
+  case y_or_n.downcase
+  when "y"
+    return true
+  when "n"
+    return false
+  else
+    play_again?
+  end
 end
 
 def set_game_mode
