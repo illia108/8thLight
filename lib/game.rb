@@ -40,6 +40,18 @@ class Game
     @active_player, @opponent = @opponent, @active_player
   end
 
+  def make_move(space)
+    @board.update_board(@active_player.marker, space)
+  end
+
+  def won?
+    @board.won?(@active_player)
+  end
+
+  def tie?
+    @board.tie?
+  end
+
 end
 
 

@@ -93,7 +93,7 @@ def get_computer_move
 end
 
 def make_move(space)
-  @game.board.update_board(@game.active_player.marker, space)
+  @game.make_move(space)
   @view.display_board(@game.board)
   @view.commentary(@game.active_player, space)
 end
@@ -142,11 +142,11 @@ def next_player(current_player)
 end
 
 def game_over?
-  if @game.board.won?(@game.active_player)
-    @view.win(@game.active_player)
+  if @game.won?
+    @view.win
     return true
   end
-  if @game.board.tie?
+  if @game.tie?
     @view.tie
     return true
   end
