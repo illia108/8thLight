@@ -73,17 +73,13 @@ end
 def get_user_move
   while true
     move = @view.prompt_user_move(@game.active_player)
-    if valid_input?(move)
+    if @game.valid_move?(move)
       make_move(move.to_i)
       break
     else
       @view.invalid_move(@game.board)
     end
   end
-end
-
-def valid_input?(space)
-  /^\d{1}$/ === space && @game.board.available_spaces.include?(space.to_i)
 end
 
 def get_computer_move
