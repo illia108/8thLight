@@ -46,6 +46,7 @@ def select_markers
   set_marker
   @game.switch_active_player
   set_marker
+  @game.switch_active_player
 end
 
 def set_marker
@@ -96,7 +97,7 @@ end
 
 def game_over?
   if @game.won?
-    @view.win
+    @view.win(@game.active_player)
     return true
   end
   if @game.tie?
