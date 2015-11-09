@@ -1,8 +1,7 @@
 class View
 
-  def welcome
-    clear
-    tic_tac_toe = [
+  def ascii_art
+    [
       "\e[32m",
       " _______ _   _______      _______         ",
       "|__   __(_) |__   __|    |__   __|        ",
@@ -11,15 +10,24 @@ class View
       "   | |  | | (__| | (_| | (__| | (_) |  __/",
       "   |_|  |_|\\___|_|\\__,_|\\___|_|\\___/ \\___|",
     ].join("\n") + "\e[0m\n"
-    tic_tac_toe.each_char do |char|
+  end
+
+  def welcome
+    clear
+    ascii_art.each_char do |char|
       print char
       sleep 0.005
     end
     sleep 0.5
+  end
 
+  def header
+    clear
+    puts ascii_art
   end
 
   def select_game_mode
+    header
     sleep 0.5
     puts ""
     puts "What type of game would you like to play?"
@@ -38,6 +46,7 @@ class View
   end
 
   def select_first_player(player1, player2)
+    header
     sleep 0.5
     puts ""
     puts "Who will go first?"
@@ -47,6 +56,7 @@ class View
   end
 
   def get_user_marker(player)
+    header
     sleep 0.5
     puts ""
     puts "Please enter a marker (X, O or any letter) for #{player.name}"
@@ -54,20 +64,20 @@ class View
   end
 
   def display_board(board)
-    clear
+    header
     pretty_board = [
       "",
-      "  #{board.values[0]} | #{board.values[1]} | #{board.values[2]}",
-      " ---|---|---",
-      "  #{board.values[3]} | #{board.values[4]} | #{board.values[5]}",
-      " ---|---|---",
-      "  #{board.values[6]} | #{board.values[7]} | #{board.values[8]}",
-      "",
+      "         #{board.values[0]} | #{board.values[1]} | #{board.values[2]}",
+      "        ---|---|---",
+      "         #{board.values[3]} | #{board.values[4]} | #{board.values[5]}",
+      "        ---|---|---",
+      "         #{board.values[6]} | #{board.values[7]} | #{board.values[8]}",
     ].join("\n") + "\n"
     puts pretty_board.gsub(/([a-zA-Z])/){ |marker| green(marker)}
   end
 
   def prompt_user_move(player)
+    puts ""
     puts "#{player.name} '#{player.marker}': Please enter the number of the cell you would like to take."
     return gets.chomp
   end
@@ -101,25 +111,29 @@ class View
   end
 
   def commentary(player, space)
-    puts "\e[32m"+"#{player.name} '#{player.marker}' takes position #{space}"+"\e[0m"
     puts ""
+    puts "\e[32m"+"#{player.name} '#{player.marker}' takes position #{space}"+"\e[0m"
   end
 
   def win(player)
+    puts ""
     puts "#{player.name} Wins!"
   end
 
   def tie
+    puts ""
     puts "It's a Tie!"
   end
 
   def play_again?
+    puts ""
     puts "Would you like to play again?"
     puts "[#{red("Y/N")}]"
     return gets.chomp
   end
 
   def game_over
+    puts ""
     puts "Thanks for playing!"
   end
 
