@@ -27,7 +27,6 @@ class View
   end
 
   def select_game_mode
-    header
     sleep 0.5
     puts "What type of game would you like to play?"
     puts "[#{red(1)}] Human v. Human"
@@ -45,7 +44,6 @@ class View
   end
 
   def select_first_player(player1, player2)
-    header
     sleep 0.5
     puts "Who will go first?"
     puts "[#{red(1)}] #{player1.name}"
@@ -54,7 +52,6 @@ class View
   end
 
   def get_user_marker(player)
-    header
     sleep 0.5
     puts "Please enter a marker (X, O or any letter) for #{player.name}"
     return gets.chomp

@@ -27,6 +27,7 @@ def play_again?
 end
 
 def set_game_mode
+  @view.header
   while true
     mode = @view.select_game_mode
     break if @game.set_mode(mode)
@@ -35,6 +36,7 @@ def set_game_mode
 end
 
 def set_player_order
+  @view.header
   while true
     first = @view.select_first_player(@game.active_player, @game.opponent)
     break if @game.set_player_order(first)
@@ -50,6 +52,7 @@ def select_markers
 end
 
 def set_marker
+  @view.header
   until @game.active_player.marker
     marker = @view.get_user_marker(@game.active_player)
     if marker == @game.opponent.marker
