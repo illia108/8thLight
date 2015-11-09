@@ -88,8 +88,7 @@ end
 
 def get_computer_move
   sleep 1
-  computer_move = @game.get_computer_move
-  make_move(computer_move)
+  make_move(@game.get_computer_move)
 end
 
 def make_move(space)
