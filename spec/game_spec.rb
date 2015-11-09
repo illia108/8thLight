@@ -76,37 +76,25 @@ describe Game do
   end
 
   context "#get_computer_move" do
-    context "winning" do
-      before {
-        game.board.values = [
-          "X", 1, 2,
-          "X", "O", 5,
-          6, "O", 8
-        ]
-        game.board.available_spaces = [1, 2, 5, 6, 8]
-        game.active_player = playerX
-        game.opponent = playerO
-      }
-      it "should return the winning move" do
-        expect(game.get_computer_move).to eq 6
-        game.switch_active_player
-        expect(game.get_computer_move).to eq 1
-      end
+    before {
+      game.board.values = [
+        "X", 1, 2,
+        3, 4, 5,
+        6, 7, 8
+      ]
+      game.board.available_spaces = [1, 2, 3, 4, 5, 6, 7, 8]
+      game.active_player = playerX
+      game.opponent = playerO
+    }
+    it "should return the center position if open" do
+      expect(game.get_computer_move).to eq 4
+      game.switch_active_player
+      expect(game.get_computer_move).to eq 4
     end
-    context "blocking" do
-      before {
-        game.board.values = [
-          "X", "O", 2,
-          3, "O", 5,
-          6, 7, 8
-        ]
-        game.board.available_spaces = [2, 3, 5, 6, 7, 8]
-        game.active_player = playerX
-        game.opponent = playerO
-      }
-      it "should return the blocking move" do
-        expect(game.get_computer_move).to eq 7
-      end
+    it "should call Minmax.choice if center is taken" do
+      game.board.values[4] = "O"
+      expect(Minmax).to receive(:choice).with(game)
+      game.get_computer_move
     end
   end
 
@@ -133,29 +121,6 @@ describe Game do
       expect(game.valid_move?("1")).to be false
       expect(game.valid_move?("23")).to be false
       expect(game.valid_move?("three")).to be false
-    end
-  end
-
-  context "score" do
-
-  end
-
-  context "get_best_move" do
-
-  end
-
-  context "#board_copy" do
-    it "should return a cloned board" do
-      expect(game.board_copy(game.board)).to_not eq game.board
-    end
-  end
-
-  context "#next_player" do
-    it "should return the next player" do
-      game.active_player = playerX
-      game.opponent = playerO
-      expect(game.next_player(playerX)).to eq playerO
-      expect(game.next_player(playerO)).to eq playerX
     end
   end
 
@@ -203,6 +168,88 @@ describe Game do
       ]
       game.board.available_spaces = [2]
       expect(game.tie?).to eq false
+    end
+  end
+
+  context Minmax do
+
+    context "#choice" do
+      context "winning" do
+        before {
+          game.board.values = [
+            "X", 1, 2,
+            "X", "O", 5,
+            6, "O", 8
+          ]
+          game.board.available_spaces = [1, 2, 5, 6, 8]
+          game.active_player = playerX
+          game.opponent = playerO
+        }
+        it "should return the winning move" do
+          expect(Minmax.choice(game)).to eq 6
+          game.switch_active_player
+          expect(Minmax.choice(game)).to eq 1
+        end
+      end
+      context "blocking" do
+        before {
+          game.board.values = [
+            "X", "O", 2,
+            3, "O", 5,
+            6, 7, 8
+          ]
+          game.board.available_spaces = [2, 3, 5, 6, 7, 8]
+          game.active_player = playerX
+          game.opponent = playerO
+        }
+        it "should return the blocking move" do
+          expect(Minmax.choice(game)).to eq 7
+        end
+      end
+    end
+
+    context "#score" do
+      before{
+        game.board.values = [
+          "X", "X", "X",
+          3, "O", "O",
+          "O", 7, 8
+        ]
+        game.active_player = playerX
+        game.opponent = playerO
+        Minmax.game = game
+      }
+      it "should return 10 if board is won by active_player" do
+        expect(Minmax.score(game.board, 0)).to eq 10
+        expect(Minmax.score(game.board, 1)).to eq 9
+        expect(Minmax.score(game.board, 9)).to eq 1
+      end
+      it "should return -10 if board is won by opponent" do
+        game.switch_active_player
+        expect(Minmax.score(game.board, 0)).to eq -10
+        expect(Minmax.score(game.board, 1)).to eq -9
+        expect(Minmax.score(game.board, 9)).to eq -1
+      end
+      it "should return 0 if board is not won" do
+        game.board.values[2] = 2
+        expect(Minmax.score(game.board, 0)).to eq 0
+      end
+    end
+
+    context "#board_copy" do
+      it "should return a cloned board" do
+        expect(Minmax.board_copy(game.board)).to_not eq game.board
+      end
+    end
+
+    context "#next_player" do
+      it "should return the next player" do
+        game.active_player = playerX
+        game.opponent = playerO
+        Minmax.game = game
+        expect(Minmax.next_player(playerX)).to eq playerO
+        expect(Minmax.next_player(playerO)).to eq playerX
+      end
     end
   end
 
