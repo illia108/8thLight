@@ -30,7 +30,14 @@ describe Board do
 
   context "#won?" do
     context "winner" do
-      before { board.values = ["X", "X", "X", 3, "O", "O", "O", 7, 8] }
+      before {
+        board.update_board("X", 0)
+        board.update_board("X", 1)
+        board.update_board("X", 2)
+        board.update_board("O", 4)
+        board.update_board("O", 5)
+        board.update_board("O", 6)
+      }
       it "should return true if board is won (with no player arguement)" do
         expect(board.won?).to eq true
       end
@@ -42,7 +49,13 @@ describe Board do
       end
     end
     context "no winner" do
-      before { board.values = ["X", "X", 2, 3, "O", "O", "O", 7, 8] }
+      before {
+        board.update_board("X", 0)
+        board.update_board("X", 1)
+        board.update_board("O", 4)
+        board.update_board("O", 5)
+        board.update_board("O", 6)
+      }
       it "should return false if board is not won (with no player arguement)" do
         expect(board.won?).to eq false
       end
@@ -55,16 +68,32 @@ describe Board do
 
   context "#tie?" do
     it "should return true if there is a tie" do
-      board.values = ["X", "X", "O", "O", "O", "X", "X", "O", "O"]
-      board.available_spaces = []
+      board.update_board("X", 0)
+      board.update_board("X", 1)
+      board.update_board("O", 2)
+      board.update_board("O", 3)
+      board.update_board("O", 4)
+      board.update_board("X", 5)
+      board.update_board("X", 6)
+      board.update_board("O", 7)
+      board.update_board("O", 8)
+
       expect(board.tie?).to eq true
     end
     it "should return false if there is no tie" do
-      board.values = ["X", "X", "X", "O", "O", "X", "X", "O", "O"]
-      board.available_spaces = []
+      board.update_board("X", 0)
+      board.update_board("X", 1)
+      board.update_board("X", 2)
+      board.update_board("O", 3)
+      board.update_board("O", 4)
+      board.update_board("X", 5)
+      board.update_board("X", 6)
+      board.update_board("O", 7)
+      board.update_board("O", 8)
+      p board
+
       expect(board.tie?).to eq false
-      board.values = ["X", "X", 2, "O", "O", "X", "X", "O", "O"]
-      board.available_spaces = [2]
+      board.update_board(2, 2)
       expect(board.tie?).to eq false
     end
   end

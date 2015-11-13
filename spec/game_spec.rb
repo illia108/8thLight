@@ -3,8 +3,6 @@ require 'spec_helper'
 describe Game do
   let(:game){ Game.new }
   let(:values){ [0,1,2,3,4,5,6,7,8] }
-  let(:playerX){ Player.new({marker: "X"}) }
-  let(:playerO){ Player.new({marker: "O"}) }
 
   context "#initialize" do
     it "should be a Game" do
@@ -77,14 +75,11 @@ describe Game do
 
   context "#get_computer_move" do
     before {
-      game.board.values = [
-        "X", 1, 2,
-        3, 4, 5,
-        6, 7, 8
-      ]
-      game.board.available_spaces = [1, 2, 3, 4, 5, 6, 7, 8]
-      game.active_player = playerX
-      game.opponent = playerO
+      game.board.update_board("X", 0)
+
+      game.set_mode("1")
+      game.active_player.marker = "X"
+      game.opponent.marker = "O"
     }
     it "should return the center position if open" do
       expect(game.get_computer_move).to eq 4
@@ -92,7 +87,8 @@ describe Game do
       expect(game.get_computer_move).to eq 4
     end
     it "should call Minmax.choice if center is taken" do
-      game.board.values[4] = "O"
+      game.board.update_board("O", 4)
+
       expect(Minmax).to receive(:choice).with(game)
       game.get_computer_move
     end
@@ -100,7 +96,8 @@ describe Game do
 
   context "#make_move" do
     before {
-      game.active_player = playerX
+      game.set_mode("1")
+      game.active_player.marker = "X"
       game.make_move(0)
     }
     it "should update the board" do
@@ -117,7 +114,7 @@ describe Game do
       expect(game.valid_move?("2")).to be true
     end
     it "should return false for invalid inputs" do
-      game.board.available_spaces = [2]
+      game.board.update_board("X", 1)
       expect(game.valid_move?("1")).to be false
       expect(game.valid_move?("23")).to be false
       expect(game.valid_move?("three")).to be false
@@ -126,47 +123,62 @@ describe Game do
 
   context "#won?" do
     it "should return true if game is won" do
-      game.board.values = [
-        "X", "X", "X",
-        3, "O", "O",
-        "O", 7, 8
-      ]
+      game.board.update_board("X", 0)
+      game.board.update_board("X", 1)
+      game.board.update_board("X", 2)
+      game.board.update_board("O", 4)
+      game.board.update_board("O", 5)
+      game.board.update_board("O", 6)
+
       expect(game.won?).to eq true
     end
     it "should return false if game is not won" do
-      game.board.values = [
-        "X", "X", 2,
-        3, "O", "O",
-        "O", 7, 8
-      ]
+      game.board.update_board("X", 0)
+      game.board.update_board("X", 1)
+      game.board.update_board("O", 4)
+      game.board.update_board("O", 5)
+      game.board.update_board("O", 6)
+
       expect(game.won?).to eq false
     end
   end
 
   context "#tie?" do
     it "should return true if there is a tie" do
-      game.board.values = [
-        "X", "X", "O",
-        "O", "O", "X",
-        "X", "O", "O"
-      ]
-      game.board.available_spaces = []
+      game.board.update_board("X", 0)
+      game.board.update_board("X", 1)
+      game.board.update_board("O", 2)
+      game.board.update_board("O", 3)
+      game.board.update_board("O", 4)
+      game.board.update_board("X", 5)
+      game.board.update_board("X", 6)
+      game.board.update_board("O", 7)
+      game.board.update_board("O", 8)
+
       expect(game.tie?).to eq true
     end
     it "should return false if there is no tie" do
-      game.board.values = [
-        "X", "X", "X",
-        "O", "O", "X",
-        "X", "O", "O"
-      ]
-      game.board.available_spaces = []
+
+      game.board.update_board("X", 0)
+      game.board.update_board("X", 1)
+      game.board.update_board("X", 2)
+      game.board.update_board("O", 3)
+      game.board.update_board("O", 4)
+      game.board.update_board("X", 5)
+      game.board.update_board("X", 6)
+      game.board.update_board("O", 7)
+      game.board.update_board("O", 8)
+
       expect(game.tie?).to eq false
-      game.board.values = [
-        "X", "X", 2,
-        "O", "O", "X",
-        "X", "O", "O"
-      ]
-      game.board.available_spaces = [2]
+      game.board.update_board("X", 0)
+      game.board.update_board("X", 1)
+      game.board.update_board("O", 3)
+      game.board.update_board("O", 4)
+      game.board.update_board("X", 5)
+      game.board.update_board("X", 6)
+      game.board.update_board("O", 7)
+      game.board.update_board("O", 8)
+
       expect(game.tie?).to eq false
     end
   end
@@ -176,14 +188,14 @@ describe Game do
     context "#choice" do
       context "winning" do
         before {
-          game.board.values = [
-            "X", 1, 2,
-            "X", "O", 5,
-            6, "O", 8
-          ]
-          game.board.available_spaces = [1, 2, 5, 6, 8]
-          game.active_player = playerX
-          game.opponent = playerO
+          game.board.update_board("X", 0)
+          game.board.update_board("O", 3)
+          game.board.update_board("O", 4)
+          game.board.update_board("O", 7)
+
+          game.set_mode("1")
+          game.active_player.marker = "X"
+          game.opponent.marker = "O"
         }
         it "should return the winning move" do
           expect(Minmax.choice(game)).to eq 6
@@ -193,14 +205,12 @@ describe Game do
       end
       context "blocking" do
         before {
-          game.board.values = [
-            "X", "O", 2,
-            3, "O", 5,
-            6, 7, 8
-          ]
-          game.board.available_spaces = [2, 3, 5, 6, 7, 8]
-          game.active_player = playerX
-          game.opponent = playerO
+          game.board.update_board("X", 0)
+          game.board.update_board("O", 1)
+          game.board.update_board("O", 4)
+          game.set_mode("1")
+          game.active_player.marker = "X"
+          game.opponent.marker = "O"
         }
         it "should return the blocking move" do
           expect(Minmax.choice(game)).to eq 7
@@ -210,13 +220,16 @@ describe Game do
 
     context "#score" do
       before{
-        game.board.values = [
-          "X", "X", "X",
-          3, "O", "O",
-          "O", 7, 8
-        ]
-        game.active_player = playerX
-        game.opponent = playerO
+        game.board.update_board("X", 0)
+        game.board.update_board("X", 1)
+        game.board.update_board("X", 2)
+        game.board.update_board("O", 4)
+        game.board.update_board("O", 5)
+        game.board.update_board("O", 6)
+
+        game.set_mode("1")
+        game.active_player.marker = "X"
+        game.opponent.marker = "O"
         Minmax.game = game
       }
       it "should return 10 if board is won by active_player" do
@@ -231,7 +244,7 @@ describe Game do
         expect(Minmax.score(game.board, 9)).to eq -1
       end
       it "should return 0 if board is not won" do
-        game.board.values[2] = 2
+        game.board.update_board(2, 2)
         expect(Minmax.score(game.board, 0)).to eq 0
       end
     end
@@ -244,8 +257,11 @@ describe Game do
 
     context "#next_player" do
       it "should return the next player" do
-        game.active_player = playerX
-        game.opponent = playerO
+        game.set_mode("1")
+        game.active_player.marker = "X"
+        playerX = game.active_player
+        game.opponent.marker = "O"
+        playerO = game.opponent
         Minmax.game = game
         expect(Minmax.next_player(playerX)).to eq playerO
         expect(Minmax.next_player(playerO)).to eq playerX
