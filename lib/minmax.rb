@@ -45,12 +45,11 @@ module Minmax
 
   def self.board_copy(board)
     temp_board = Board.new
-    # temp_board.values = board.values.clone
 
     9.times do |i|
       temp_board.update_board(board.values[i], i)
     end
-    # temp_board.available_spaces = board.available_spaces.clone
+
     return temp_board
   end
 
