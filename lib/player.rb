@@ -1,5 +1,6 @@
 class Player
-  attr_accessor :marker, :name, :human
+  attr_reader :name, :human
+  attr_accessor :marker
 
   def initialize(args)
     @marker = args[:marker]

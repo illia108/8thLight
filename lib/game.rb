@@ -3,7 +3,7 @@ require_relative 'player'
 require_relative 'minmax'
 
 class Game
-  attr_accessor :board, :active_player, :opponent
+  attr_reader :board, :active_player, :opponent
 
   def initialize
     @board = Board.new
@@ -29,6 +29,7 @@ class Game
   def set_player_order(first)
     case first
     when "1"
+      # do nothing
     when "2"
       switch_active_player
     else
