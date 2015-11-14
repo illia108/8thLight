@@ -72,7 +72,6 @@ class View
   def prompt_user_move(player)
     puts ""
     puts "#{player.name} '#{player.marker}': Please enter the number of the cell you would like to take."
-    return gets.chomp
   end
 
   def invalid_mode

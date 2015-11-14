@@ -68,15 +68,16 @@ end
 def play_game
   @view.display_board(@game.board)
   while true
-    @game.active_player.human? ? get_user_move : get_computer_move
+    player_move
     break if game_over?
     @game.switch_active_player
   end
 end
 
-def get_user_move
+def player_move
+  @view.prompt_user_move(@game.active_player)
   while true
-    move = @view.prompt_user_move(@game.active_player)
+    move = @game.active_player.pick_space(@game)
     if @game.valid_move?(move)
       make_move(move.to_i)
       break
@@ -84,11 +85,6 @@ def get_user_move
       @view.invalid_move(@game.board)
     end
   end
-end
-
-def get_computer_move
-  sleep 1
-  make_move(@game.get_computer_move)
 end
 
 def make_move(space)

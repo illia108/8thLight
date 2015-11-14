@@ -1,14 +1,16 @@
 class Board
-  attr_accessor :values, :available_spaces
+  attr_reader :values, :available_spaces
 
   def initialize
     @values = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-    @available_spaces = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+  end
+
+  def available_spaces
+    @values.select{|value| value.class == Fixnum}
   end
 
   def update_board(value, space)
     @values[space] = value
-    @available_spaces.delete(space)
   end
 
   def won?(player = nil)
@@ -36,6 +38,6 @@ class Board
   end
 
   def tie?
-    !won? && @available_spaces.empty?
+    !won? && available_spaces.empty?
   end
 end
