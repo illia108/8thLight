@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Player do
   let(:player){ Player.new({name: "Player", human: true}) }
   let(:computer){ Player.new({name: "Computer", human: false}) }
+  let(:game){ Game.new }
 
   context "#initialize" do
     it "should be a Player" do
@@ -27,6 +28,28 @@ describe Player do
     it "should respond to human? method with boolean" do
       expect(player.human?).to eq(true)
       expect(computer.human?).to eq(false)
+    end
+  end
+
+  context "#pick_space" do
+    before {
+      game.board.update_board("X", 0)
+
+      game.set_mode("2")
+      game.active_player.marker = "X"
+      game.opponent.marker = "O"
+    }
+    it "should return the center position if open" do
+      expect(game.active_player.pick_space(game)).to eq "4"
+      game.switch_active_player
+      expect(game.active_player.pick_space(game)).to eq "4"
+    end
+    it "should call Minmax.choice if center is taken" do
+      game.board.update_board("O", 4)
+
+      expect(Minmax).to receive(:choice).with(game)
+      game.active_player.pick_space(game)
+      # game.get_computer_move
     end
   end
 end
