@@ -1,6 +1,5 @@
 require_relative 'board'
 require_relative 'player'
-require_relative 'minmax'
 
 class Game
   attr_reader :board, :active_player, :opponent
@@ -40,14 +39,6 @@ class Game
 
   def switch_active_player
     @active_player, @opponent = @opponent, @active_player
-  end
-
-  def get_computer_move
-    if @board.values[4] == 4
-      return 4
-    else
-      return Minmax.choice(self)
-    end
   end
 
   def make_move(space)
