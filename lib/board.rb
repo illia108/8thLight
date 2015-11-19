@@ -25,7 +25,6 @@ class Board
       [2, 4, 6],
     ]
     tic_tac_toes.each do |row|
-      # next if row.any? {|cell| @available_spaces.include?(cell)}
       if [@values[row[0]], @values[row[1]], @values[row[2]]].uniq.length == 1
         if player
           return true if @values[row[0]] == player.marker
