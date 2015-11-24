@@ -21,25 +21,42 @@ module Minmax
     end
   end
 
-  def self.get_best_move(board, player, depth = 0)
-    return score(board, depth) if board.won? || board.tie?
-    depth += 1
-    scores = {}
-
-    board.available_spaces.each do |space|
-      possible_board = board_copy(board)
-      possible_board.update_board(player.marker, space)
-      scores[space] = get_best_move(possible_board, next_player(player), depth)
+  def self.get_best_move(board, player, depth = 0, min = -Float::INFINITY, max = Float::INFINITY)
+    if (board.won? || board.tie?) || depth == (7 - board.board_size)
+      return score(board, depth)
     end
+    depth += 1
 
     if player == @game.active_player
-      best_score = scores.max_by{|space, score| score}
-      @choice = best_score[0]  #space
-      return best_score[1]     #score
+      value = min
+      board.available_spaces.each do |space|
+        possible_board = board_copy(board)
+        possible_board.update_board(player.marker, space)
+        score = get_best_move(possible_board, next_player(player), depth, value, max)
+
+        if score > value
+          @choice = space
+          value = score
+        end
+
+        return max if value > max
+      end
+      return value
     else
-      best_score = scores.min_by{|space, score| score}
-      @choice = best_score[0]  #space
-      return best_score[1]     #score
+      value = max
+      board.available_spaces.each do |space|
+        possible_board = board_copy(board)
+        possible_board.update_board(player.marker, space)
+        score = get_best_move(possible_board, next_player(player), depth, min, value)
+
+        if score < value
+          @choice = space
+          value = score
+        end
+
+        return min if value < min
+      end
+      return value
     end
   end
 
