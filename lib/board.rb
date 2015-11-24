@@ -14,26 +14,31 @@ class Board
   end
 
   def won?(player = nil)
-    tic_tac_toes = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ]
-    tic_tac_toes.each do |row|
-      if [@values[row[0]], @values[row[1]], @values[row[2]]].uniq.length == 1
+    board_size = Math.sqrt(@values.length)
+    rows = []
+    left_to_right = []
+    right_to_left = []
+    won = false
+
+    @values.each_slice(board_size).with_index do |row, index|
+      left_to_right << row[index]
+      right_to_left << row[(board_size-1)-index]
+      rows << row
+    end
+
+    all_sets = rows + rows.transpose + [left_to_right] + [right_to_left]
+
+    all_sets.each do |set|
+      if set.uniq.length == 1
         if player
-          return true if @values[row[0]] == player.marker
+          won = true if set[0] == player.marker
         else
-          return true
+          won = true
         end
       end
     end
-    return false
+
+    return won
   end
 
   def tie?
