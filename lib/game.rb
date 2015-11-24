@@ -5,7 +5,21 @@ class Game
   attr_reader :board, :active_player, :opponent
 
   def initialize
-    @board = Board.new
+    @board = Board.new({board_size: 3})
+  end
+
+  def set_board_size(size)
+    case size
+    when '1'
+      # do nothing
+    when '2'
+      @board = Board.new({board_size: 4})
+    when '3'
+      @board = Board.new({board_size: 5})
+    else
+      return false
+    end
+    return true
   end
 
   def set_mode(mode)
@@ -46,7 +60,7 @@ class Game
   end
 
   def valid_move?(space)
-    /^\d{1}$/ === space && @board.available_spaces.include?(space.to_i)
+    /^\d+$/ === space && @board.available_spaces.include?(space.to_i)
   end
 
   def won?

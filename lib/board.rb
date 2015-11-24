@@ -1,8 +1,19 @@
 class Board
-  attr_reader :values, :available_spaces
+  attr_reader :values, :available_spaces, :board_size
 
-  def initialize
-    @values = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+  def initialize(args = {})
+    @board_size = args[:board_size] || 3
+
+    if @board_size == 3
+      @values = Array(0..8)
+    elsif @board_size == 4
+      @values = Array(0..15)
+    elsif @board_size == 5
+      @values = Array(0..24)
+    else
+      @values = Array(0..8)
+    end
+
   end
 
   def available_spaces
@@ -14,15 +25,14 @@ class Board
   end
 
   def won?(player = nil)
-    board_size = Math.sqrt(@values.length)
     rows = []
     left_to_right = []
     right_to_left = []
     won = false
 
-    @values.each_slice(board_size).with_index do |row, index|
+    @values.each_slice(@board_size).with_index do |row, index|
       left_to_right << row[index]
-      right_to_left << row[(board_size-1)-index]
+      right_to_left << row[(@board_size-1)-index]
       rows << row
     end
 

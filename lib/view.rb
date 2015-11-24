@@ -26,6 +26,15 @@ class View
     puts ascii_art
   end
 
+  def select_board_size
+    sleep 0.5
+    puts "What size board would you like to use?"
+    puts "[#{red(1)}] 3x3"
+    puts "[#{red(2)}] 4x4"
+    puts "[#{red(3)}] 5x5"
+    return gets.chomp
+  end
+
   def select_game_mode
     sleep 0.5
     puts "What type of game would you like to play?"
@@ -59,19 +68,30 @@ class View
 
   def display_board(board)
     header
-    pretty_board = [
-      "         #{board.values[0]} | #{board.values[1]} | #{board.values[2]}",
-      "        ---|---|---",
-      "         #{board.values[3]} | #{board.values[4]} | #{board.values[5]}",
-      "        ---|---|---",
-      "         #{board.values[6]} | #{board.values[7]} | #{board.values[8]}",
-    ].join("\n") + "\n"
-    puts pretty_board.gsub(/([a-zA-Z])/){ |marker| green(marker)}
+
+    pretty_board = []
+    spacer = []
+    board.values.each_slice(board.board_size) do |row|
+      row[0] = " #{row[0]}"
+      pretty_board << row.join(" | ")
+      spacer << "----"
+    end
+
+    pretty_board = pretty_board.join("\n#{spacer.join("|")}\n") + "\n"
+    pretty_board.gsub!(/\s\w{1}\s/){ |space| " #{space}"}
+    pretty_board.gsub!(/([a-zA-Z])/){ |marker| green(marker)}
+    puts pretty_board
   end
 
   def prompt_user_move(player)
     puts ""
     puts "#{player.name} '#{player.marker}': Please enter the number of the cell you would like to take."
+  end
+
+  def invalid_size
+    puts ""
+    puts red("Please enter a valid board size")
+    puts "Valid values: 1, 2, 3"
   end
 
   def invalid_mode
