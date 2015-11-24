@@ -78,6 +78,9 @@ def player_move
   @view.prompt_user_move(@game.active_player)
   while true
     move = @game.active_player.pick_space(@game)
+    if move == nil
+      move = gets.chomp
+    end
     if @game.valid_move?(move)
       make_move(move.to_i)
       break

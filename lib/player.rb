@@ -17,7 +17,7 @@ class HumanPlayer < Player
   end
 
   def pick_space(game)
-    return gets.chomp
+    nil
   end
 end
 
