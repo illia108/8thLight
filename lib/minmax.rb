@@ -46,8 +46,8 @@ module Minmax
   def self.board_copy(board)
     temp_board = Board.new({board_size: board.board_size})
 
-    (board.board_size**2).times do |i|
-      temp_board.update_board(board.values[i], i)
+    board.values.each_with_index do |value, index|
+      temp_board.update_board(value, index)
     end
 
     return temp_board
