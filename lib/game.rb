@@ -11,14 +11,14 @@ class Game
   def set_mode(mode)
     case mode
     when '1'
-      @active_player = Player.new({name: "Player1", human: true})
-      @opponent = Player.new({name: "Player2", human: true})
+      @active_player = HumanPlayer.new({name: "Player1"})
+      @opponent = HumanPlayer.new({name: "Player2"})
     when '2'
-      @active_player = Player.new({name: "Computer1", human: false})
-      @opponent = Player.new({name: "Computer2", human: false})
+      @active_player = AIPlayer.new({name: "Computer1"})
+      @opponent = AIPlayer.new({name: "Computer2"})
     when '3'
-      @active_player = Player.new({name: "Player", human: true})
-      @opponent = Player.new({name: "Computer", human: false})
+      @active_player = HumanPlayer.new({name: "Player"})
+      @opponent = AIPlayer.new({name: "Computer"})
     else
       return false
     end
