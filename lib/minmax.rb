@@ -22,7 +22,7 @@ module Minmax
   end
 
   def self.get_best_move(board, player, depth = 0, min = -Float::INFINITY, max = Float::INFINITY)
-    if board.won? || board.tie? || depth == (7 - board.board_size)
+    if board.won? || board.tie? || depth == (7 - board.size)
       return score(board, depth)
     end
 
@@ -58,7 +58,7 @@ module Minmax
   end
 
   def self.board_copy(board)
-    temp_board = Board.new({board_size: board.board_size})
+    temp_board = Board.new({size: board.size})
 
     board.values.each_with_index do |value, index|
       temp_board.update_board(value, index)

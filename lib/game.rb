@@ -5,17 +5,17 @@ class Game
   attr_reader :board, :active_player, :opponent
 
   def initialize
-    @board = Board.new({board_size: 3})
+    @board = Board.new({size: 3})
   end
 
-  def set_board_size(size)
+  def set_size(size)
     case size
     when '1'
       # do nothing
     when '2'
-      @board = Board.new({board_size: 4})
+      @board = Board.new({size: 4})
     when '3'
-      @board = Board.new({board_size: 5})
+      @board = Board.new({size: 5})
     else
       return false
     end

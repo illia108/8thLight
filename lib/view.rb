@@ -26,7 +26,7 @@ class View
     puts ascii_art
   end
 
-  def select_board_size
+  def select_size
     sleep 0.5
     puts "What size board would you like to use?"
     puts "[#{red(1)}] 3x3"
@@ -71,7 +71,7 @@ class View
 
     pretty_board = []
     spacer = []
-    board.values.each_slice(board.board_size) do |row|
+    board.values.each_slice(board.size) do |row|
       row[0] = " #{row[0]}"
       pretty_board << row.join(" | ")
       spacer << "----"

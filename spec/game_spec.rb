@@ -6,7 +6,7 @@ describe Game do
 
   context "#initialize" do
     before {
-      game.set_board_size("1")
+      game.set_size("1")
     }
     it "should be a Game" do
       expect(game).to be_a(Game)
