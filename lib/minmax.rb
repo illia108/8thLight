@@ -22,7 +22,7 @@ module Minmax
   end
 
   def self.get_best_move(board, player, depth = 0, min = -Float::INFINITY, max = Float::INFINITY)
-    if board.won? || board.tie? || depth == (7 - board.size)
+    if board.won? || board.tie? || depth == ([2, 7 - board.size].max)
       return score(board, depth)
     end
 

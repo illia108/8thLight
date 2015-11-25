@@ -10,6 +10,8 @@ class Board
       @values = Array(0..15)
     elsif @size == 5
       @values = Array(0..24)
+    elsif @size == 6
+      @values = Array(0..35)
     else
       @values = Array(0..8)
     end

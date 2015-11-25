@@ -16,6 +16,8 @@ class Game
       @board = Board.new({size: 4})
     when '3'
       @board = Board.new({size: 5})
+    when '4'
+      @board = Board.new({size: 6})
     else
       return false
     end
