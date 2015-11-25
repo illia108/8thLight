@@ -18,7 +18,6 @@ class Player
     if human?
       return gets.chomp
     else
-      sleep 0.5
       if game.board.values[4] == 4
         return "4"
       else
