@@ -18,16 +18,14 @@ class Player
     if human?
       return gets.chomp
     else
-      if game.board.board_size.odd?
-        center = (game.board.values.length - 1) / 2
+      # sleep 0.25
+      if game.board.size.odd?
+        center = (game.board.values.length) / 2
         if game.board.values[center] == center
           return center.to_s
-        else
-          return Minmax.choice(game).to_s
         end
-      else
-        return Minmax.choice(game).to_s
       end
+      return Minmax.choice(game).to_s
     end
   end
 

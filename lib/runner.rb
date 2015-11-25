@@ -8,7 +8,7 @@ def start_game
   @view = View.new
   @view.welcome
 
-  set_board_size
+  set_size
   set_game_mode
   set_player_order
   select_markers
@@ -29,11 +29,11 @@ def play_again?
   end
 end
 
-def set_board_size
+def set_size
   @view.header
   while true
-    size = @view.select_board_size
-    break if @game.set_board_size(size)
+    size = @view.select_size
+    break if @game.set_size(size)
     @view.invalid_size
   end
 end
