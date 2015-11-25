@@ -22,42 +22,39 @@ module Minmax
   end
 
   def self.get_best_move(board, player, depth = 0, min = -Float::INFINITY, max = Float::INFINITY)
-    if (board.won? || board.tie?) || depth == (7 - board.board_size)
+    if board.won? || board.tie? || depth == (7 - board.board_size)
       return score(board, depth)
     end
+
     depth += 1
+    scores = {}
 
     if player == @game.active_player
-      value = min
       board.available_spaces.each do |space|
-        possible_board = board_copy(board)
-        possible_board.update_board(player.marker, space)
-        score = get_best_move(possible_board, next_player(player), depth, value, max)
-
-        if score > value
-          @choice = space
-          value = score
-        end
-
-        return max if value > max
+        possible_board = new_game_state(board, player, space)
+        scores[space] = get_best_move(possible_board, next_player(player), depth, min, max)
+        min = [scores[space], min].max
+        return max if min > max
       end
-      return value
+      best_score = scores.max_by{|space, score| score}
     else
-      value = max
       board.available_spaces.each do |space|
-        possible_board = board_copy(board)
-        possible_board.update_board(player.marker, space)
-        score = get_best_move(possible_board, next_player(player), depth, min, value)
-
-        if score < value
-          @choice = space
-          value = score
-        end
-
-        return min if value < min
+        possible_board = new_game_state(board, player, space)
+        scores[space] = get_best_move(possible_board, next_player(player), depth, min, max)
+        max = [scores[space], max].min
+        return min if max < min
       end
-      return value
+      best_score = scores.min_by{|space, score| score}
     end
+
+    @choice = best_score[0]  #space
+    return best_score[1]     #score
+  end
+
+  def self.new_game_state(board, player, space)
+    temp_board = board_copy(board)
+    temp_board.update_board(player.marker, space)
+    temp_board
   end
 
   def self.board_copy(board)
