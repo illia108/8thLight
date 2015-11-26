@@ -90,7 +90,6 @@ describe Board do
       board.update_board("X", 6)
       board.update_board("O", 7)
       board.update_board("O", 8)
-      p board
 
       expect(board.tie?).to eq false
       board.update_board(2, 2)
