@@ -29,10 +29,10 @@ class View
   def select_size
     sleep 0.5
     puts "What size board would you like to use?"
-    puts "[#{red(1)}] 3x3 TicTacToe"
-    puts "[#{red(2)}] 4x4 TicTacT-OhMy!"
-    puts "[#{red(3)}] 5x5 TicTacTooManyToes!!"
-    puts "[#{red(4)}] 6x6 Excessive Unnecessary and Uncalled For"
+    puts "[#{red(1)}] 3x3"
+    puts "[#{red(2)}] 4x4"
+    puts "[#{red(3)}] 5x5"
+    puts "[#{red(4)}] 6x6"
     return gets.chomp
   end
 
