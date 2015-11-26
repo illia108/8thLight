@@ -18,7 +18,6 @@ class Player
     if human?
       return gets.chomp
     else
-      # sleep 0.25
       if game.board.size.odd?
         center = (game.board.values.length) / 2
         if game.board.values[center] == center
