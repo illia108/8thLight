@@ -1,8 +1,21 @@
 class Board
-  attr_reader :values, :available_spaces
+  attr_reader :values, :available_spaces, :size
 
-  def initialize
-    @values = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+  def initialize(args = {})
+    @size = args[:size] || 3
+
+    if @size == 3
+      @values = Array(0..8)
+    elsif @size == 4
+      @values = Array(0..15)
+    elsif @size == 5
+      @values = Array(0..24)
+    elsif @size == 6
+      @values = Array(0..35)
+    else
+      @values = Array(0..8)
+    end
+
   end
 
   def available_spaces
@@ -14,27 +27,30 @@ class Board
   end
 
   def won?(player = nil)
-    tic_tac_toes = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ]
-    tic_tac_toes.each do |row|
-      # next if row.any? {|cell| @available_spaces.include?(cell)}
-      if [@values[row[0]], @values[row[1]], @values[row[2]]].uniq.length == 1
+    rows = []
+    left_to_right = []
+    right_to_left = []
+    won = false
+
+    @values.each_slice(@size).with_index do |row, index|
+      left_to_right << row[index]
+      right_to_left << row[(@size-1)-index]
+      rows << row
+    end
+
+    all_sets = rows + rows.transpose + [left_to_right] + [right_to_left]
+
+    all_sets.each do |set|
+      if set.uniq.length == 1
         if player
-          return true if @values[row[0]] == player.marker
+          won = true if set[0] == player.marker
         else
-          return true
+          won = true
         end
       end
     end
-    return false
+
+    return won
   end
 
   def tie?

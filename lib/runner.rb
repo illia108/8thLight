@@ -7,9 +7,12 @@ def start_game
   @game = Game.new
   @view = View.new
   @view.welcome
+
+  set_size
   set_game_mode
   set_player_order
   select_markers
+
   play_game
   play_again? ? start_game : @view.game_over
 end
@@ -23,6 +26,15 @@ def play_again?
     return false
   else
     play_again?
+  end
+end
+
+def set_size
+  @view.header
+  while true
+    size = @view.select_size
+    break if @game.set_size(size)
+    @view.invalid_size
   end
 end
 
