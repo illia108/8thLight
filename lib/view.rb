@@ -26,6 +26,10 @@ class View
     puts ascii_art
   end
 
+  def get_input
+    gets.chomp
+  end
+
   def select_size
     sleep 0.5
     puts "What size board would you like to use?"
@@ -33,7 +37,7 @@ class View
     puts "[#{red(2)}] 4x4"
     puts "[#{red(3)}] 5x5"
     puts "[#{red(4)}] 6x6"
-    return gets.chomp
+    gets.chomp
   end
 
   def select_game_mode
@@ -42,7 +46,7 @@ class View
     puts "[#{red(1)}] Human v. Human"
     puts "[#{red(2)}] Computer v. Computer"
     puts "[#{red(3)}] Human v. Computer"
-    return gets.chomp
+    gets.chomp
   end
 
   def red(text)
@@ -58,13 +62,13 @@ class View
     puts "Who will go first?"
     puts "[#{red(1)}] #{player1.name}"
     puts "[#{red(2)}] #{player2.name}"
-    return gets.chomp
+    gets.chomp
   end
 
   def get_user_marker(player)
     sleep 0.5
     puts "Please enter a marker (X, O or any letter) for #{player.name}"
-    return gets.chomp
+    gets.chomp
   end
 
   def display_board(board)
@@ -142,7 +146,7 @@ class View
     puts ""
     puts "Would you like to play again?"
     puts "[#{red("Y/N")}]"
-    return gets.chomp
+    gets.chomp
   end
 
   def game_over
