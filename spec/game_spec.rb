@@ -25,18 +25,18 @@ describe Game do
   context "#set_mode" do
     it "should create two human players: mode 1" do
       game.set_mode("1")
-      expect(game.active_player.human?).to be true
-      expect(game.opponent.human?).to be true
+      expect(game.active_player).to be_a HumanPlayer
+      expect(game.opponent).to be_a HumanPlayer
     end
     it "should create two computer players: mode 2" do
       game.set_mode("2")
-      expect(game.active_player.human?).to be false
-      expect(game.opponent.human?).to be false
+      expect(game.active_player).to be_a AIPlayer
+      expect(game.opponent).to be_a AIPlayer
     end
     it "should create one human and one computer player: mode 3" do
       game.set_mode("3")
-      expect(game.active_player.human?).to be true
-      expect(game.opponent.human?).to be false
+      expect(game.active_player).to be_a HumanPlayer
+      expect(game.opponent).to be_a AIPlayer
     end
     it "should return true for valid inputs" do
       expect(game.set_mode("1")).to be true
