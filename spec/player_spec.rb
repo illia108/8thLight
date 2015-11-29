@@ -14,7 +14,7 @@ describe Player do
       expect(player.name).to eq("Player")
       expect(computer.name).to eq("Computer")
     end
-    it "should have a boolean value for human" do
+    it "should be the proper subclass" do
       expect(player).to be_a HumanPlayer
       expect(computer).to be_a AIPlayer
     end
