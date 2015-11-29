@@ -89,69 +89,57 @@ class View
   end
 
   def prompt_user_move(player)
-    puts ""
-    puts "#{player.name} '#{player.marker}': Please enter the number of the cell you would like to take."
+    puts "\n#{player.name} '#{player.marker}': Please enter the number of the cell you would like to take."
   end
 
   def invalid_size
-    puts ""
-    puts red("Please enter a valid board size")
+    puts red("\nPlease enter a valid board size")
     puts "Valid values: 1, 2, 3"
   end
 
   def invalid_mode
-    puts ""
-    puts red("Please enter a valid mode value")
+    puts red("\nPlease enter a valid mode value")
     puts "Valid values: 1, 2, 3"
   end
 
   def invalid_player
-    puts ""
-    puts red("Please enter a valid player value")
+    puts red("\nPlease enter a valid player value")
     puts "Valid values: 1, 2"
   end
 
   def invalid_move(board)
-    puts ""
-    puts red("Please enter a valid value")
+    puts red("\nPlease enter a valid value")
     puts "Valid values: #{board.available_spaces}"
   end
 
   def marker_in_use(player)
-    puts ""
-    puts red("#{player.name} is using this marker, please choose another")
+    puts red("\n#{player.name} is using this marker, please choose another")
   end
 
   def invalid_marker
-    puts ""
-    puts red("Please enter a single non-digit character")
+    puts red("\nPlease enter a single non-digit character")
   end
 
   def commentary(player, space)
-    puts ""
-    puts "\e[32m"+"#{player.name} '#{player.marker}' takes position #{space}"+"\e[0m"
+    puts "\n\e[32m"+"#{player.name} '#{player.marker}' takes position #{space}"+"\e[0m"
   end
 
   def win(player)
-    puts ""
-    puts "#{player.name} Wins!"
+    puts "\n#{player.name} Wins!"
   end
 
   def tie
-    puts ""
-    puts "It's a Tie!"
+    puts "\nIt's a Tie!"
   end
 
   def play_again?
-    puts ""
-    puts "Would you like to play again?"
+    puts "\nWould you like to play again?"
     puts "[#{red("Y/N")}]"
     gets.chomp
   end
 
   def game_over
-    puts ""
-    puts "Thanks for playing!"
+    puts "\nThanks for playing!"
   end
 
   def clear
