@@ -21,33 +21,47 @@ module Minmax
     end
   end
 
-  def self.get_best_move(board, player, depth = 0)
-    return score(board, depth) if board.won? || board.tie?
+  def self.get_best_move(board, player, depth = 0, min = -Float::INFINITY, max = Float::INFINITY)
+    if board.won? || board.tie? || depth == ([2, 7 - board.size].max)
+      return score(board, depth)
+    end
+
     depth += 1
     scores = {}
 
-    board.available_spaces.each do |space|
-      possible_board = board_copy(board)
-      possible_board.update_board(player.marker, space)
-      scores[space] = get_best_move(possible_board, next_player(player), depth)
+    if player == @game.active_player
+      board.available_spaces.each do |space|
+        possible_board = new_game_state(board, player, space)
+        scores[space] = get_best_move(possible_board, next_player(player), depth, min, max)
+        min = [scores[space], min].max
+        return max if min > max
+      end
+      best_score = scores.max_by{|space, score| score}
+    else
+      board.available_spaces.each do |space|
+        possible_board = new_game_state(board, player, space)
+        scores[space] = get_best_move(possible_board, next_player(player), depth, min, max)
+        max = [scores[space], max].min
+        return min if max < min
+      end
+      best_score = scores.min_by{|space, score| score}
     end
 
-    if player == @game.active_player
-      best_score = scores.max_by{|space, score| score}
-      @choice = best_score[0]  #space
-      return best_score[1]     #score
-    else
-      best_score = scores.min_by{|space, score| score}
-      @choice = best_score[0]  #space
-      return best_score[1]     #score
-    end
+    @choice = best_score[0]  #space
+    return best_score[1]     #score
+  end
+
+  def self.new_game_state(board, player, space)
+    temp_board = board_copy(board)
+    temp_board.update_board(player.marker, space)
+    temp_board
   end
 
   def self.board_copy(board)
-    temp_board = Board.new
+    temp_board = Board.new({size: board.size})
 
-    9.times do |i|
-      temp_board.update_board(board.values[i], i)
+    board.values.each_with_index do |value, index|
+      temp_board.update_board(value, index)
     end
 
     return temp_board
