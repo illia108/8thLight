@@ -134,7 +134,7 @@ class View
 
   def play_again?
     puts "\nWould you like to play again?"
-    puts "[#{red("Y/N")}]"
+    puts "[#{red("Y/n")}]"
     gets.chomp
   end
 
